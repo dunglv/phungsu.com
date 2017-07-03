@@ -1,0 +1,161 @@
+.error {
+    color: #F44336;
+    font-size: 0.85em;
+    line-height: 1;
+    margin-top: 7px;
+    display: block;
+}
+
+.success {
+    color: #4CAF50;
+    font-size: 0.85em;
+    line-height: 1;
+    margin-top: 7px;
+    display: block;
+}
+
+.error-box {
+    border: 1px solid #F44336;
+    outline-color: #F44336 !important;
+    box-shadow: 0 0 5px 0 #F44336;
+}
+
+.radio-two {
+    position: relative;
+    width: 100px;
+    height: 30px;
+    background: #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.radio-two input[type="radio"] {
+    position: absolute;
+    height: 100%;
+    width: 0;
+    margin: 0;
+    padding: 0;
+    /*visibility: hidden;*/
+}
+
+.radio-two input[type="radio"]:first-child {
+    width: 50%;
+    left: 0;
+    cursor: pointer;
+}
+
+.radio-two input[type="radio"]:last-child {
+    width: 50%;
+    right: 0;
+    cursor: pointer;
+}
+
+.radio-two input[type="radio"]::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    font-size: 14px;
+    color: #fff;
+    background: #4CAF50;
+    visibility: visible;
+    text-align: center;
+    line-height: 30px;
+}
+
+.radio-two input[type="radio"]:first-child::before {
+    content: '';
+    background: #ccc;
+}
+
+.radio-two input[type="radio"]:last-child::before {
+    content: '';
+    background: #ccc;
+}
+
+.radio-two input[type="radio"]:checked::after {
+    content: attr(data-text);
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+    display: block;
+    background: #ddd;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.radio-two input[data-text="on"]:checked::after {
+    background: #4CAF50;
+}
+
+.radio-two input[data-text="off"]:checked::after {
+    background: #d9534f;
+}
+
+.bl-tag {
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 5px;
+    padding: 5px;
+    display: table;
+    width: 100%;
+}
+
+.bl-tag .bl-l-tag {
+    display: inline-block;
+    float: left;
+}
+
+.bl-tag .bl-l-tag .tag-i {
+    display: block;
+    float: left;
+    line-height: 1;
+    background: #eaeaea;
+    padding: 3px 8px;
+    border: 1px solid #ddd;
+    margin-right: 5px;
+    font-size: 14px;
+    border-radius: 3px;
+    position: relative;
+    padding-right: 20px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.bl-tag .tag-in {
+    line-height: 1;
+    width: 100px;
+    min-width: 10px;
+    display: inline-block;
+    margin: 0;
+    float: left;
+    border: 0;
+    outline: none;
+    margin-top: 5px;
+}
+
+.mejs__container{
+    background: #549256 !important;
+}
+
+.paginate{}
+.paginate li{}
+.paginate li a{
+    color:#4caf50; 
+}
+.paginate li.active span, .paginate li:hover span:hover{
+    background: #4caf50;
+    border-color: #3f9242;
+}
