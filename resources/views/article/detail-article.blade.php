@@ -143,7 +143,15 @@
                     </div>
                     @else
                         @if(Auth::check())
-                            Trở thành người đầu tiên bình luận bài viết này.
+                            <p>Trở thành người đầu tiên bình luận bài viết này.</p>
+                            <div class="form-comment">
+                                <form action="" method="POST" role="form">
+                                    <div class="form-group">
+                                        <textarea name="" id="input" class="form-control" rows="3" required="required" placeholder="Nhập ý kiến của bạn vào đây..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Gủi bình luận</button>
+                                </form>
+                            </div>
                         @else
                             Đăng nhập tại <a href="{{ url('/login') }}">đây</a> và trở thành người đầu tiên bình luận bài viết này.
                         @endif

@@ -25,7 +25,8 @@ class ArticleStatEvent
     {
         if ($event === 'view') {
             // dd($article);
-            // $article->stat->view += 1;
+            $article->stat->view += 1;
+            $article->save();
         }
     }
 

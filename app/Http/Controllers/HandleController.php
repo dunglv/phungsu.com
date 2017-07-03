@@ -12,6 +12,7 @@ use Auth;
 use App\Category;
 use App\Article;
 use App\Tag;
+use App\Stat;
 use Validator;
 use App\Events\ArticleStatEvent;
 class HandleController extends Controller
@@ -43,7 +44,7 @@ class HandleController extends Controller
 
     public function article_create_store(Request $request)
     {
-        dd(auth()->user());
+        // dd(auth()->user()->id);
         $title = $request->get('title');
         $slug = $request->get('slug');
         $desc = $request->get('description');
@@ -223,7 +224,7 @@ class HandleController extends Controller
         $article = Article::where('slug', $slug)->where('active', 1)->get();
         // dd($article[0]->stat);
         if (count($article) > 0) {
-            // event(new ArticleStatEvent('view', $article));
+            event(new ArticleStatEvent('view', $article[0]));
     	   return view('article.detail-article')->with('article', $article);
         }else{
             return redirect()->route('ui.home');

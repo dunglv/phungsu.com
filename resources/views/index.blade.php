@@ -72,8 +72,15 @@
                             <ul class="dropdown-menu">
                                 <li><a href="#">Profile</a></li>
                                 <li><a href="#">Post</a></li>
-                                <li><a href="{{ url('/logout') }}">Logout</a></li>
+                                <li>
+                                {!!Form::open(['url' => '/logout', 'method' => 'POST'])!!}
+                                    <button type="submit">Logout</button>
+                                {!!Form::close()!!}
+                                </li>
                             </ul>
+                        </li>
+                        @else
+                            <li><a href="{{ url('/login') }}" class="contribute">Login</a>
                         </li>
                         @endif
                     </ul>

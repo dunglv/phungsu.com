@@ -17,6 +17,8 @@ class CreateArticlesTable extends Migration
            $table->increments('id');
             $table->string('title');
             $table->string('slug');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('description')->nullable();
             $table->integer('format')->default(0); // 0: normal | 1: audio | 2: image | 3: video
             $table->text('content')->nullable(); // 
@@ -38,6 +40,12 @@ class CreateArticlesTable extends Migration
      */
     public function down()
     {
+        // Schema::disableForeignKeyConstraints(); 
+        Schema::table('articles', function(Blueprint $table){
+            $table->dropForeign('articles_user_id_foreign');
+        });
         Schema::dropIfExists('articles');
+        // Schema::enableForeignKeyConstraints();
+
     }
 }
