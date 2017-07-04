@@ -84,10 +84,25 @@ Route::get('category/{slug}', [
 	'uses' => 'HandleController@category_detail'
 	]);
 
+
 /******************************************/
 /* +search
 /******************************************/
 Route::get('search', [
 	'as' => 'ui.search.result',
 	'uses' => 'HandleController@search_result'
+	]);
+
+
+/******************************************/
+/* +comment
+/******************************************/
+Route::post('/article/{slug}/comment-save', [
+	'as' => 'ui.comment.store',
+	'uses' => 'HandleController@comment_store'
+	]);
+
+Route::get('/comment/handle-req-comment', [
+	'as' => 'ui.comment.handle-req-comment',
+	'uses' => 'HandleController@handle_req_comment'
 	]);

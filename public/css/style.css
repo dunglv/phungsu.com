@@ -204,3 +204,53 @@ a:focus {
     padding: 1.4px 2px;
     line-height: 1;
 }
+
+.bl-sc.bl-sa{}
+.bl-sc.bl-sa .bl-t{
+    font-weight: 700;
+}
+.bl-sc.bl-sa .bl-l{}
+.bl-sc.bl-sa .bl-i{}
+.bl-sc.bl-sa .bl-ii{
+    display: inline-block;
+    width: 100%;
+    clear: both;
+    margin-right: 0;
+}
+.bl-sc.bl-sa .bl-i-l{
+    float: left;
+    width: 50px;
+}
+.bl-sc.bl-sa .bl-i-l > .bl-ct-l{
+    border: 1px solid #ccc;
+    width: 50px;
+    height: 50px;
+    display: block;
+}
+.bl-sc.bl-sa .bl-i-r{
+    float: right;
+    width: calc(100% - 50px);
+    padding-left: 5px;
+}
+.bl-sc.bl-sa .bl-hh{
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.bl-sc.bl-sa .bl-hh a{
+        background: transparent;
+        font-weight: 700;
+        margin-bottom: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding-top: 0;
+        display: block;
+        width: 100%;
+        max-width: 100%;
+}
+.bl-sc.bl-sa .bl-ext{
+    font-size: 0.8em;
+    color: #999;
+}

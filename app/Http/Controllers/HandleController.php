@@ -13,8 +13,10 @@ use App\Category;
 use App\Article;
 use App\Tag;
 use App\Stat;
+use App\Comment;
 use Validator;
 use App\Events\ArticleStatEvent;
+use Carbon\Carbon;
 class HandleController extends Controller
 {
     public function home()
@@ -184,7 +186,9 @@ class HandleController extends Controller
             'description' => 'min:10|max:500',
             'content' => 'min:100',
             'category' => 'choose',
-            'audio' => 'mimes:mpga,3gp,m4a,wav,wma,amr|between:1,10240',
+            'audio' => 'mimes:mpga|between:1,10240', 
+            //'audio' => 'mimes:mpga,3gp,m4a,wav,wma,amr|between:1,10240',
+
             'tags' => 'required|mintag'
             ], $message);
         // if ($validate->fails()) {
@@ -201,6 +205,7 @@ class HandleController extends Controller
         $a->thumbnail = $public_audio_url.$audio;
         $a->opencomment = $request->get('opencomment');
         $a->openedit = $request->get('openedit');
+        $a->user_id = auth()->user()->id;
         $a->notify = $request->get('notify');
         // $a->active = $request->get('active');
         if($a->save()){
@@ -213,6 +218,7 @@ class HandleController extends Controller
                 $request->file('audio')->move(public_path().'/audio/upload', $audio);
             }
             $a->category()->attach($request->get('category'));
+             $a->stat()->save(new Stat(['article_id' => $a->id]));
             return redirect()->route('ui.article.create-article')->with('flash_success', 'Add new article successful.');
         }else{
             return redirect()->back()->with('flash_error', 'Create new article is failed');
@@ -222,10 +228,13 @@ class HandleController extends Controller
     public function article_detail($slug="", Request $request)
     {
         $article = Article::where('slug', $slug)->where('active', 1)->get();
-        // dd($article[0]->stat);
+        $comments = Comment::whereHas('article', function($q) use ($slug){
+            $q->where('slug', $slug);
+        })->where('parent', NULL)->paginate(10);
+
         if (count($article) > 0) {
             event(new ArticleStatEvent('view', $article[0]));
-    	   return view('article.detail-article')->with('article', $article);
+    	    return view('article.detail-article')->with(['article' => $article, 'comments' => $comments]);
         }else{
             return redirect()->route('ui.home');
         }
@@ -233,8 +242,12 @@ class HandleController extends Controller
     public function article_detail_mp3($slug="", Request $request)
     {
         $article = Article::where('slug', $slug)->where('active', 1)->get();
+        $comments = Comment::whereHas('article', function($q) use ($slug){
+            $q->where('slug', $slug);
+        })->where('parent', NULL)->paginate(10);
+
         if (count($article) > 0) {
-            return view('article.detail-mp3')->with('article', $article);
+            return view('article.detail-mp3')->with(['article' => $article, 'comments' => $comments]);
         }else{
             return redirect()->route('ui.home');
         }
@@ -305,7 +318,7 @@ class HandleController extends Controller
     {
         $articles = Article::whereHas('category', function($query) use ($slug){
             $query->where('slug', $slug);
-        })->paginate(10);
+        })->where('active', 1)->paginate(10);
         return view('category.detail-category')->with('articles', $articles);
     }
 
@@ -325,6 +338,61 @@ class HandleController extends Controller
         else{
             $articles = Article::where('active', 1)->paginate(10);
             return view('search.result')->with('articles', $articles);
+        }
+    }
+
+    /**************************************************************************************
+     * comment (+comment)
+     **************************************************************************************
+     * CURD new comment
+     * 
+     * 
+     **/
+    public function comment_store($slug, Request $request)
+    {
+        $article = Article::where('slug', $slug)->get();
+        $comment = new Comment;
+        $comment->comment = $request->comment;
+        $edit =  (empty($request->edit) || $request->has('edit'))?NULL:$request->get('edit');
+        $comment->edit = json_encode(array('comment'=>$edit, 'time'=>Carbon::now()));
+        $comment->parent = !empty($request->get('parent'))?$request->get('parent'):NULL;
+        $comment->active = 1;
+        if ($comment->save()) {
+            $comment->article()->attach($article[0]->id, array('user_id' => auth()->user()->id));
+            return redirect()->back();
+        }
+    }
+
+    public function handle_req_comment(Request $request)
+    {
+        if ($request->has('q')) {
+            //Check request from user, if delete comment then continute
+            if ($request->get('q') === base64_encode('d-c-r')) {
+                //Get id from comment to delete
+                $comment = Comment::find($request->get('id'));
+                //Check comment is a parent of orther comments, if parent then delete children comment
+                if (!is_null($comment->parent) || !empty($comment->parent)) {
+                    $child = Comment::where('parent', $comment->id)->get();
+                    //Send id sub comment to ajax
+                    $a = array();
+                    if($comment->delete()){
+                        foreach ($child as $ch) {
+                            $a[] = $ch->id;
+                            (Comment::find($ch->id))->delete();
+                        }
+                        return array('status' => 'OK', 'scmt' => $a);
+                    }else{
+                        return array('status' => 'Fail');
+                    }
+                }else{
+                    if($comment->delete()){
+                        return array('status' => 'OK');
+                    }else{
+                        return array('status' => 'Fail');
+                    }
+                }
+                
+            }
         }
     }
 

@@ -96,7 +96,7 @@
     text-align: center;
     line-height: 30px;
     color: #fff;
-    background: #333;
+    background: #4caf50;
 }
 
 .bl-dt .dt-ac li.like a {
@@ -357,8 +357,17 @@
 
 .bl-dt .dt-cmt .cmt-list {
     margin-top: 20px;
+    -webkit-transition: 0.2s;
+    -o-transition: 0.2s;
+    transition: 0.2s;
 }
-
+.bl-dt .dt-cmt .cmt-list.c-collapse{
+    max-height: 0;
+    overflow: hidden;
+    -webkit-transition: 0.2s;
+    -o-transition: 0.2s;
+    transition: 0.2s;
+}
 .bl-dt .dt-cmt .cmt-i {
     border: 1px solid #ddd;
     background: #fff;
@@ -429,4 +438,18 @@
 .dt-player{
     margin-bottom: 20px;
     margin-top: 50px;
+}
+.form-comment {
+    position: relative;
+    margin-bottom: 20px;
+}
+.btn-reply{
+    text-decoration: underline;
+    position: absolute;
+    bottom: 20px;
+    right: 0;
+}
+.btn-reply:hover{
+    cursor: pointer;
+    text-decoration: none;
 }

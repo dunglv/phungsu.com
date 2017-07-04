@@ -18,11 +18,6 @@ class Article extends Model
     	return $this->belongsTo('App\User', 'user_id');
     }
 
-    public function comments()
-    {
-    	return $this->belongsToMany('App\Comment');
-    }
-
     public function tags()
     {
     	return $this->belongsToMany('App\Tag');
@@ -31,5 +26,10 @@ class Article extends Model
     public function stat()
     {
         return $this->hasOne('App\Stat');
+    }
+
+    public function comments()
+    {
+        return $this->belongsToMany('App\Comment');
     }
 }

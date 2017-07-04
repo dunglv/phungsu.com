@@ -24,11 +24,13 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet"> --}}
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald:300,400,600" rel="stylesheet">
     {!!Html::script('/public/js/lib/jq-ui.js')!!}
+    {!!Html::script('/public/js/gnlJpY4-pl-own.js')!!}
+    {!!Html::script('/public/js/txB56mM-main.js')!!}
     @yield('style')
     @yield('t-script')
 </head>
 
-<body>
+<body id="phsc">
     <div id="app">
         <nav class="navbar navbar-default" role="navigation">
             <div class="container-fluid">

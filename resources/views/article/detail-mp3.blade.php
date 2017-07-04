@@ -120,76 +120,84 @@
             <div class="dt-cmt">
                 <div class="cmt-t"><label>Comments ({{$article[0]->comments->count()}})</label> <span><i class="fa fa-chevron-down"></i></span></div>
                 <div class="cmt-list">
-                    @if($article[0]->comments->count() > 0)
-                    <div id="" class="cmt-i">
-                        <div class="cmt-inf">
-                            <div class="fll">
-                                {!!Html::image('/public/images/upload/user/user-female.png', 'luong viet dung')!!}
-                            </div>
-                            <div class="flr">
-                                <p><a href="#">dunglv</a></p>
-                                <p>10 phút trước</p>
-                            </div>
-                            <div class="cmt-opt">
-                                <span><i class="fa fa-ellipsis-v"></i></span>
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-remove"></i> Delete comment</a></li>
-                                    <li><a href="#"><i class="fa fa-pencil"></i> Edit comment</a></li>
-                                    <li><a href="#"><i class="fa fa-backward"></i> Report comment</a></li>
-                                </ul>
-                            </div>
+                     @if(Auth::check())
+                        <div class="form-comment">
+                            {!!Form::open(['method'=>'POST', 'route'=> ['ui.comment.store', 'slug' => $article[0]->slug]])!!}
+                                <div class="form-group">
+                                    <textarea name="comment" id="comment_input" class="form-control" rows="3" required="required" placeholder="Nhập ý kiến của bạn vào đây..."></textarea>
+                                    <input type="hidden" name="parent">
+                                    <input type="hidden" name="article" value="{{$article[0]->id}}">
+                                </div>
+                                <button type="submit" class="btn btn-success">Gủi bình luận</button>
+                            {!!Form::close()!!}
                         </div>
-                        <div class="cmt-ct">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias molestiae recusandae aliquid quas explicabo, odit voluptates dolores distinctio. Corporis iusto quae nemo suscipit ad omnis voluptatem adipisci laudantium, sequi voluptate tempore eius magni explicabo sint ducimus, blanditiis hic maxime, similique nostrum obcaecati optio. Mollitia beatae excepturi eligendi! Recusandae accusantium amet corrupti itaque. Impedit veniam, autem vitae rerum aut eos obcaecati beatae nihil quia, quisquam provident rem. Repellendus tempore iure tempora facere aliquam praesentium corporis quasi dolorum! Neque perspiciatis tenetur doloribus, molestiae porro maxime inventore sapiente expedita iure rerum quibusdam deserunt accusantium fugiat, quasi vero, eos dicta impedit cupiditate beatae! Id assumenda cupiditate, quia, velit sit dolore inventore alias, laborum architecto adipisci veniam aliquam quibusdam est hic, ipsum nostrum voluptatum aliquid rem deserunt illum deleniti natus porro? Eaque reiciendis eum repellat excepturi incidunt, expedita pariatur distinctio officiis aut numquam possimus, consequatur enim sint dolorum provident alias odit iure hic assumenda dolores odio iste culpa atque nulla! Veritatis consequatur similique explicabo, rem incidunt quam cupiditate ea accusantium, nobis delectus nisi ratione illo. Sunt nobis consectetur iste natus totam dolorum sequi ratione cumque ipsa ipsum sed doloribus unde esse, autem vitae, maxime perspiciatis molestiae amet eius. Vitae nisi animi a fuga. Dolores expedita, porro?
-                        </div>
-                        <div class="cmt-ac">
-                            <a href="#">Quote</a>
-                            <a href="#">Reply</a>
-                        </div>
-                    </div>
-                    <div id="" class="cmt-i cmt-rep">
-                        <div class="cmt-inf">
-                            <div class="fll">
-                                {!!Html::image('/public/images/upload/user/user-female.png', 'luong viet dung')!!}
-                            </div>
-                            <div class="flr">
-                                <p><a href="#">dunglv</a></p>
-                                <p>10 phút trước</p>
-                            </div>
-                        </div>
-                        <div class="cmt-ct">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias molestiae recusandae aliquid quas explicabo, odit voluptates dolores distinctio. Corporis iusto quae nemo suscipit ad omnis voluptatem adipisci laudantium, porro?
-                        </div>
-                        <div class="cmt-ac">
-                            <a href="#">Quote</a>
-                            <a href="#">Reply</a>
-                        </div>
-                    </div>
-                    <div id="" class="cmt-i">
-                        <div class="cmt-inf">
-                            <div class="fll">
-                                {!!Html::image('/public/images/upload/user/user-female.png', 'luong viet dung')!!}
-                            </div>
-                            <div class="flr">
-                                <p><a href="#">dunglv</a></p>
-                                <p>10 phút trước</p>
-                            </div>
-                        </div>
-                        <div class="cmt-ct">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias molestiae recusandae aliquid quas explicabo, odit voluptates dolores distinctio. Corporis iusto quae nemo suscipit ad omnis voluptatem adipisci laudantium, sequi voluptate tempore eius magni explicabo sint ducimus, blanditiis hic maxime, similique nostrum obcaecati optio. Mollitia beatae excepturi eligendi! Recusandae accusantium amet corrupti itaque. Impedit veniam, autem vitae rerum aut eos obcaecati beatae nihil quia, quisquam provident rem. Repellendus tempore iure tempora facere aliquam praesentium corporis quasi dolorum! Neque perspiciatis tenetur doloribus, molestiae porro maxime inventore sapiente expedita iure rerum quibusdam deserunt accusantium fugiat, quasi vero, eos dicta impedit cupiditate beatae! Id assumenda cupiditate, quia, velit sit dolore inventore alias, laborum architecto adipisci veniam aliquam quibusdam est hic, ipsum nostrum voluptatum aliquid rem deserunt illum deleniti natus porro? Eaque reiciendis eum repellat excepturi incidunt, expedita pariatur distinctio officiis aut numquam possimus, consequatur enim sint dolorum provident alias odit iure hic assumenda dolores odio iste culpa atque nulla! Veritatis consequatur similique explicabo, rem incidunt quam cupiditate ea accusantium, nobis delectus nisi ratione illo. Sunt nobis consectetur iste natus totam dolorum sequi ratione cumque ipsa ipsum sed doloribus unde esse, autem vitae, maxime perspiciatis molestiae amet eius. Vitae nisi animi a fuga. Dolores expedita, porro?
-                        </div>
-                        <div class="cmt-ac">
-                            <a href="#">Quote</a>
-                            <a href="#">Reply</a>
-                        </div>
-                    </div>
                     @else
-                        @if(Auth::check())
-                            Trở thành người đầu tiên bình luận bài viết này.
-                        @else
-                            Đăng nhập tại <a href="{{ url('/login') }}">đây</a> và trở thành người đầu tiên bình luận bài viết này.
-                        @endif
+                        <p>Đăng nhập tại <a href="{{ url('/login') }}">đây</a> và bình luận bài viết này.</p>
                     @endif
+                    @if($comments->total() > 0)
+                        @foreach($comments as $cmt)
+                            @if(empty($cmt->parent) || is_null($cmt->parent))
+                                <div id="cmt_{{$cmt->id}}" class="cmt-i">
+                                    <div class="cmt-inf">
+                                        <div class="fll">
+                                            {!!Html::image('/public/images/upload/user/user-female.png', 'luong viet dung')!!}
+                                        </div>
+                                        <div class="flr">
+                                            <p><a href="#">{{$cmt->user[0]->name}}</a></p>
+                                            <p>{{$cmt->created_at->format('d-m-Y H:i:s')}}</p>
+                                        </div>
+                                        <div class="cmt-opt">
+                                            <span><i class="fa fa-ellipsis-v"></i></span>
+                                            <ul>
+                                                <li class="cmt-delete" data-c = "{{$cmt->id}}"><a href="#"><i class="fa fa-remove"></i> Delete comment</a></li>
+                                                <li><a href="#"><i class="fa fa-pencil"></i> Edit comment</a></li>
+                                                <li><a href="#"><i class="fa fa-backward"></i> Report comment</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="cmt-ct">
+                                        {{$cmt->comment}}
+                                    </div>
+                                    <div class="cmt-ac">
+                                        <a id="rep_{{$cmt->id}}" class="action-rep" data-c ="{{$cmt->id}}" data-u="{{$cmt->user[0]->id}}" href="#">Reply</a>
+                                    </div>
+                                </div>
+                                @if(count($cmt->children($cmt->id)) > 0)
+                                    @foreach($cmt->children($cmt->id) as $child)
+                                        <div id="cmt_{{$child->id}}" class="cmt-i cmt-rep">
+                                            <div class="cmt-inf">
+                                                <div class="fll">
+                                                    {!!Html::image('/public/images/upload/user/user-female.png', 'luong viet dung')!!}
+                                                </div>
+                                                <div class="flr">
+                                                    <p><a href="#">{{$child->user[0]->name}}</a></p>
+                                                    <p>{{$child->created_at->format('d-m-Y H:i:s')}}</p>
+                                                </div>
+                                                <div class="cmt-opt">
+                                                    <span><i class="fa fa-ellipsis-v"></i></span>
+                                                    <ul>
+                                                        <li class="cmt-delete" data-c = "{{$child->id}}"><a href="#"><i class="fa fa-remove"></i> Delete comment</a></li>
+                                                        <li><a href="#"><i class="fa fa-pencil"></i> Edit comment</a></li>
+                                                        <li><a href="#"><i class="fa fa-backward"></i> Report comment</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="cmt-ct">
+                                                {{$child->comment}}
+                                            </div>
+                                            <div class="cmt-ac">
+                                                <a id="rep_{{$cmt->id}}" class="action-rep" data-c ="{{$cmt->id}}" data-u="{{$cmt->user[0]->id}}" href="#">Reply</a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            @endif
+                        @endforeach
+                    @else
+                        <p>Trở thành người đầu tiên bình luận bài viết này.</p>
+                    @endif
+                    {{$comments->links()}}
+                   
                 </div>
             </div>
             <div class="dt-fb">
@@ -207,53 +215,61 @@
                     </select>
                 </div>
             </div>
-            <div class="bl-sc">
-                <div class="bl-t">Tag</div>
-                <div class="bl-ct">
-                    <textarea name="tags" id="inputTags" class="form-control" rows="3" required="required" placeholder="Nhập môt vài tag liên quan bài viết..."></textarea>
-                </div>
-            </div>
-            <div class="bl-sc">
-                <div class="bl-t">Hoạt động</div>
-                <div class="bl-ct">
-                    <div class="radio">
-                        <div class="bl-s-t">Cho phép bình luận</div>
-                        <label>
-                            <input type="radio" name="opencoment" id="inputOpencoment" value="" checked="checked"> Enable
-                        </label>
-                        <label>
-                            <input type="radio" name="opencoment" id="inputOpencoment" value="" checked="checked"> Disable
-                        </label>
-                    </div>
-                </div>
-                <div class="bl-ct">
-                    <div class="radio">
-                        <div class="bl-s-t">Cho phép chỉnh sửa</div>
-                        <label>
-                            <input type="radio" name="openedit" id="inputOpencoment" value="" checked="checked"> Enable
-                        </label>
-                        <label>
-                            <input type="radio" name="openedit" id="inputOpencoment" value="" checked="checked"> Disable
-                        </label>
-                    </div>
-                </div>
-                <div class="bl-ct">
-                    <div class="radio">
-                        <div class="bl-s-t">Nhận thông báo từ bài viết</div>
-                        <label>
-                            <input type="radio" name="notify" id="inputOpencoment" value="" checked="checked"> Enable
-                        </label>
-                        <label>
-                            <input type="radio" name="notify" id="inputOpencoment" value="" checked="checked"> Disable
-                        </label>
-                    </div>
-                </div>
-                <div class="bl-ct">
-                    <button type="button" class="btn btn-sm btn-success">Lưu</button>
-                    <button type="button" class="btn btn-sm btn-danger">Hủy bỏ</button>
-                </div>
-            </div>
         </div>
     </div>
 </div>
+<script>
+    $(function(){
+        var qt = $('.action-quote');
+        var rep = $('.action-rep');
+        rep.on('click', function(e){
+            var parent_id = $(this).data('c');
+            $('input[name="parent"]').val(parent_id);
+            $('textarea[name="comment"]').focus();
+            
+            if ($('.form-comment').find('.btn-reply').length === 0) {
+                $('.form-comment').addClass('form-reply').append('<span class="btn-reply error">Hủy bỏ phản hồi</span>');
+            }
+            e.preventDefault();
+            // alert(parent_id);
+        });
+        $(document).on('click', '.btn-reply', function(){
+            $(this).remove();
+            $('input[name="parent"]').val('');
+        });
+        $('.cmt-t').on('click', function(e){
+            if ($(this).hasClass('c-collapse')) {
+                $(this).removeClass('c-collapse');
+                $('.cmt-list').removeClass('c-collapse');
+            }else{
+                $(this).addClass('c-collapse');
+                $('.cmt-list').addClass('c-collapse');
+            }
+        });
+
+        $('.cmt-delete').on('click', function(e){
+            e.preventDefault();
+            var _this = $(this);
+            $(this).ownConfirm({
+                ok_action: function(){
+                    var _id = _this.data('c');
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{route('ui.comment.handle-req-comment')}}",
+                        data: {'q': window.btoa('d-c-r'), 'id': _id},
+                        success: function(data){
+                            if (data.status === 'OK') {
+                                $('#cmt_'+_id).remove();
+                                alert('Delete successful comment');
+                            }
+                        },
+                        error: function(e){
+
+                        }
+                    })
+                }
+            });
+        });
+    });
+</script>
 @stop
