@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'Đăng ký')
 
 @section('content')
 <div class="container">
@@ -65,6 +66,7 @@
                                 <button type="submit" class="btn btn-success">
                                     Đăng ký
                                 </button>
+                                <a class="btn btn-danger" href="{{ url('/') }}">Quay về trang chủ</a>
                             </div>
                         </div>
                     </form>

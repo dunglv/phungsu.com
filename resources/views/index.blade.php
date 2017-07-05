@@ -74,7 +74,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{Auth::user()->name}} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ route('ui.user.change-password') }}">Đổi mật khẩu</a></li>
-                                <li><a href="#">Thông tin tài khoản</a></li>
+                                <li><a href="{{ route('ui.user.detail') }}">Thông tin tài khoản</a></li>
                                 <li><a href="{{ route('ui.logout') }}">Đăng xuất</a></li>
                                 {{-- <li>
                                 {!!Form::open(['url' => '/logout', 'method' => 'POST'])!!}

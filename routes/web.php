@@ -14,7 +14,7 @@ Route::get('/',	[
 	'as' => 'ui.home',
 	'uses' => 'HandleController@home'
 	]);
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => ['auth']], function() {
     Route::get('/logout', [
     	'as' => 'ui.logout',
     	'uses' => 'HandleController@logout'
@@ -61,8 +61,20 @@ Route::group(['middleware' => 'auth'], function() {
 		'as' => 'ui.user.change-password-update',
 		'uses' => 'HandleController@user_change_password_update'
 		]);
+	
+	Route::get('/profile', [
+		'as' => 'ui.user.detail',
+		'uses' => 'HandleController@user_detail'
+		]);
+	Route::post('/profile', [
+		'as' => 'ui.user.update-detail',
+		'uses' => 'HandleController@user_update_profile'
+		]);
+	Route::get('/deactivate', [
+		'as' => 'ui.user.deactivate',
+		'uses' => 'HandleController@user_deactivate'
+		]);
 });
-Auth::routes();
 
 /**
  * Detail of article
@@ -121,3 +133,6 @@ Route::get('/comment/handle-req-comment', [
 	'as' => 'ui.comment.handle-req-comment',
 	'uses' => 'HandleController@handle_req_comment'
 	]);
+
+
+Auth::routes();

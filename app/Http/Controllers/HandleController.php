@@ -392,7 +392,8 @@ class HandleController extends Controller
                     if($comment->delete()){
                         foreach ($child as $ch) {
                             $a[] = $ch->id;
-                            (Comment::find($ch->id))->delete();
+                            $cmt = Comment::find($ch->id);
+                            $cmt->delete();
                         }
                         return array('status' => 'OK', 'scmt' => $a);
                     }else{
@@ -426,7 +427,13 @@ class HandleController extends Controller
 
     public function user_detail(Request $request)
     {
-        # code...
+        if (auth()->check()) {
+            $user = auth()->user();
+            return view('user.profile-me')->with('user', $user);
+        }else{
+            return redirect('/');
+        }
+        
     }
 
     public function user_change_password(Request $request)
@@ -437,10 +444,19 @@ class HandleController extends Controller
     public function user_change_password_update(Request $request)
     {
         $message = array(
-            'old_password.exists' => 'Mật khẩu cũ không đúng. Vui lòng nhập chính xác mật khẩu đã đăng ký trước đó.'
+            'old_password.oldpassword' => 'Mật khẩu cũ không đúng. Vui lòng nhập chính xác mật khẩu đã đăng ký trước đó.'
             );
+        Validator::extend('oldpassword', function ($attribute, $value)
+        {
+            if (Auth::check()) {
+                $pass = auth()->user()->password;
+            }else{
+                $pass ='';
+            }
+            return \Hash::check($value, $pass); 
+        });
         $this->validate($request, [
-            'old_password' => 'required|exists:users,password',
+            'old_password' => 'required|oldpassword',
             'password' => 'required|min:8|max:20',
             'password_confirmation' => 'required|same:password'
             ], $message);
@@ -451,14 +467,37 @@ class HandleController extends Controller
             $user = User::find(auth()->user()->id);
             $user->password = bcrypt($n_pass);
             if ($user->save()) {
-                redirect()->back()->with(['status' => 1, 'label' => 'success', 'message' => 'Thay đổi mật khẩu mới thành công. Bây giờ bạn có thể đăng nhập bằng mật khẩu vừa đổi.']);
+                return redirect()->back()->with(['status' => 1, 'label' => 'success', 'message' => 'Thay đổi mật khẩu mới thành công. Bây giờ bạn có thể đăng nhập bằng mật khẩu vừa đổi.']);
             }else{
-                redirect()->back()->with(['status' => 0, 'label' => 'danger', 'message' => 'Thay đổi mật khẩu mới không thành công. Vui lòng kiểm tra chính xác thông tin nhập vào.']);
+                return redirect()->back()->with(['status' => 0, 'label' => 'danger', 'message' => 'Thay đổi mật khẩu mới không thành công. Vui lòng kiểm tra chính xác thông tin nhập vào.']);
             }
         }else{
             return redirect()->back();
         }
-        return view('user.change-password');
+    }
+
+    public function user_update_profile(Request $request)
+    {
+        $user = User::find(auth()->user()->id);
+        $user->name = ($request->has('name'))?$request->get('name'):NULL;
+        $user->fullname = ($request->has('fullname'))?$request->get('fullname'):NULL;
+        $user->gender = ($request->has('gender'))?$request->get('gender'):NULL;
+        $user->phone = ($request->has('phone'))?$request->get('phone'):NULL;
+        $user->address = ($request->has('address'))?$request->get('address'):NULL;
+        $user->religion = ($request->has('religion'))?$request->get('religion'):NULL;
+        $user->bio = ($request->has('bio'))?$request->get('bio'):NULL;
+        if ($user->save()) {
+            return redirect()->back()->with(['status'=>1, 'label' => 'success', 'message' => 'Cập nhật thông tin cá nhân thành công']);
+        }else{
+            return redirect('/');
+        }
+    }
+
+    public function user_deactivate(Request $request)
+    {
+        if (Auth::check()) {
+            return view('user.deactivate')->with('user', Auth::user());
+        }
     }
 
 }

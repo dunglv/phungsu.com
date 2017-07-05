@@ -8,7 +8,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title', 'Trang chủ') - PhungSu.com</title>
+    <link rel="shortcut icon" type="image/png" href="{{ url('/public/images/ui/favicon.png') }}" />
 
     <!-- Styles -->
     <link href="{{ url('/public/css/app.css') }}" rel="stylesheet">
