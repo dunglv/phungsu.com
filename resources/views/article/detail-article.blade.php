@@ -167,19 +167,50 @@
             </div>
         </div>
     </div>
+    {{-- SIDEBAR --}}
     <div class="col-md-3">
         <div class="sidebar">
-            {{-- <div class="bl-sc">
-                <div class="bl-t">Nằm trong mục</div>
-                <div class="bl-ct">
-                    <select name="" id="input" class="form-control">
-                        <option value="">-- Select One --</option>
-                    </select>
+            @if(isset($sames) && $sames->count() > 0)
+                <div class="bl-sc bl-sa">
+                    <div class="bl-t">Bài viết liên quan</div>
+                    <div class="bl-ct">
+                        <div class="bl-l">
+                            @foreach($sames as $a)
+                            <div class="bl-i bl-i-hot">
+                                <div class="bl-ii">
+                                    <div class="bl-i-l">
+                                        <span class="bl-ct-l">
+                                            @if(!is_null($a->thumbnail) || !empty($a->thumbnail))
+                                                @if($a->format === 0)
+                                                {!!Html::image($a->thumbnail, $a->title)!!}
+                                                @elseif($a->format === 1)
+                                                <i class="fa fa-music"></i>
+                                                @elseif($a->format === 2)
+                                                <i class="fa fa-video-camera"></i>
+                                                @elseif($a->format === 3)
+                                                <i class="fa fa-carmera"></i>
+                                                @endif
+                                            @else
+                                                {!!Html::image(url('/public/images/upload/default.jpg'), $a->title)!!}
+                                            @endif
+                                        </span>
+                                    </div>
+                                    <div class="bl-i-r">
+                                        <div class="bl-hh"><a href="{{ route('ui.article.detail', $a->slug) }}">{{$a->title}}</a></div>
+                                        <div class="bl-ext">{{str_limit($a->content, 60, '...')}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
-            </div> --}}
-           @include('layouts.sidebar-hot')
+            @endif
+            @include('layouts.sidebar-tag')
+            @include('layouts.sidebar-ad')
         </div>
     </div>
+    {{-- END SIDEBAR --}}
 </div>
 <script>
     $(function(){

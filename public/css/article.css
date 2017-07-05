@@ -1,7 +1,39 @@
+.mc-t {
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 2em;
+    color: #4CAF50;
+    text-shadow: 1px 1px 0px #166119, 1px 1px 0px #333, 1px 1px 3px #333;
+}
+
+.mc-help {
+    text-align: center;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #7b7b7b;
+    position: relative;
+    padding-top: 10px;
+    margin-top: 15px;
+}
+
+.mc-help::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 1px;
+    background: #ccc;
+    top: 0;
+    left: 50%;
+    margin-left: -100px;
+}
+
 .hc-create {
     display: table;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 40px;
 }
 
 .hc-create a {
@@ -361,13 +393,15 @@
     -o-transition: 0.2s;
     transition: 0.2s;
 }
-.bl-dt .dt-cmt .cmt-list.c-collapse{
+
+.bl-dt .dt-cmt .cmt-list.c-collapse {
     max-height: 0;
     overflow: hidden;
     -webkit-transition: 0.2s;
     -o-transition: 0.2s;
     transition: 0.2s;
 }
+
 .bl-dt .dt-cmt .cmt-i {
     border: 1px solid #ddd;
     background: #fff;
@@ -425,7 +459,8 @@
 }
 
 .bl-dt .dt-ct.dt-lr {}
-.bl-dt .dt-ct.dt-lr .lr-t{
+
+.bl-dt .dt-ct.dt-lr .lr-t {
     font-weight: 900;
     margin-bottom: 10px;
     font-size: 1.1em;
@@ -435,21 +470,64 @@
     margin-bottom: 7px;
     line-height: 1.2;
 }
-.dt-player{
+
+.dt-player {
     margin-bottom: 20px;
     margin-top: 50px;
 }
+
 .form-comment {
     position: relative;
     margin-bottom: 20px;
 }
-.btn-reply{
+
+.btn-reply {
     text-decoration: underline;
     position: absolute;
     bottom: 20px;
     right: 0;
 }
-.btn-reply:hover{
+
+.btn-reply:hover {
     cursor: pointer;
     text-decoration: none;
+}
+
+.block-ss.block-page-create {
+    background: url(../images/ui/yu0kYej.png) no-repeat bottom right;
+}
+.block-ss.block-page-create .block-tt h3,
+.block-ss.block-ss.block-page-create .block-tt span {
+    font-size: 1.3em;
+    color: #656565;
+    text-transform: capitalize;
+    border: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 70px;
+    margin-bottom: 14px;
+    font-weight: 100;
+}
+
+.block-ss.block-page-create .h-item.h-horizontal {
+    box-shadow: none;
+    background: #fafdff;
+}
+
+.block-ss.block-page-create .h-item.h-horizontal .h-thumb {
+    height: 100px;
+}
+
+.block-ss.block-page-create .h-item.h-horizontal h3 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.block-ss.block-page-create .h-item .h-desc {
+    padding-bottom: 0px;
+}
+
+.block-ss.block-page-create .h-item.h-horizontal .h-i-item {
+    padding-bottom: 0;
 }

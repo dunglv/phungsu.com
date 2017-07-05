@@ -207,14 +207,30 @@
     </div>
     <div class="col-md-3">
         <div class="sidebar">
-            <div class="bl-sc">
-                <div class="bl-t">Nằm trong mục</div>
-                <div class="bl-ct">
-                    <select name="" id="input" class="form-control">
-                        <option value="">-- Select One --</option>
-                    </select>
+            @if(isset($sames) && $sames->count() > 0)
+                <div class="bl-sc bl-sa">
+                    <div class="bl-t">Bài viết liên quan</div>
+                    <div class="bl-ct">
+                        <div class="bl-l">
+                            @foreach($sames as $a)
+                            <div class="bl-i bl-i-hot">
+                                <div class="bl-ii">
+                                    <div class="bl-i-l">
+                                        <span class="bl-ct-l"></span>
+                                    </div>
+                                    <div class="bl-i-r">
+                                        <div class="bl-hh"><a href="{{ route('ui.article.detail', $a->slug) }}">{{$a->title}}</a></div>
+                                        <div class="bl-ext">{{str_limit($a->content, 30, '...')}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
-            </div>
+                @endif
+             @include('layouts.sidebar-tag')
+             @include('layouts.sidebar-ad')
         </div>
     </div>
 </div>

@@ -14,6 +14,7 @@ use App\Article;
 use App\Tag;
 use App\Stat;
 use App\Comment;
+use App\User;
 use Validator;
 use App\Events\ArticleStatEvent;
 use Carbon\Carbon;
@@ -21,13 +22,15 @@ class HandleController extends Controller
 {
     public function home()
     {
-        $articles = Article::where('active', 1)->paginate(8);
-    	return view('partials.home')->with('articles', $articles);
+        $articles = Article::where('active', 1)->orderBy('id', 'desc')->take(4)->get();
+        $categories = Category::where('active', 1)->take(4)->get();
+    	return view('partials.home')->with(['articles' => $articles, 'categories' => $categories]);
     }
 
     public function home_create()
     {
-    	return view('article.home-create');
+        $articles = Article::inRandomOrder()->where('active', 1)->get();
+    	return view('article.create-home')->with(['articles' => $articles]);
     }
 
     /**************************************************************************************
@@ -228,13 +231,16 @@ class HandleController extends Controller
     public function article_detail($slug="", Request $request)
     {
         $article = Article::where('slug', $slug)->where('active', 1)->get();
+        $sames = Article::whereHas('category', function($q) use($article){
+            $q->where('id', $article[0]->category[0]->id);
+        })->where('id', '<>', $article[0]->id)->get();
         $comments = Comment::whereHas('article', function($q) use ($slug){
             $q->where('slug', $slug);
         })->where('parent', NULL)->paginate(10);
 
         if (count($article) > 0) {
             event(new ArticleStatEvent('view', $article[0]));
-    	    return view('article.detail-article')->with(['article' => $article, 'comments' => $comments]);
+    	    return view('article.detail-article')->with(['article' => $article, 'comments' => $comments, 'sames' => $sames]);
         }else{
             return redirect()->route('ui.home');
         }
@@ -296,16 +302,19 @@ class HandleController extends Controller
      **/
     public function tag_home(Request $request)
     {
-        
         return view('tag.home-tag');
     }
 
     public function tag_detail($slug = '', Request $request)
     {
+        $latests = Article::whereHas('tags', function($query) use ($slug){
+            $query->where('slug', $slug);
+        })->orderBy('id', 'desc')->take(4)->get();
+
         $articles = Article::whereHas('tags', function($query) use ($slug){
             $query->where('slug', $slug);
         })->paginate(10);
-        return view('tag.detail-tag')->with('articles', $articles);
+        return view('tag.detail-tag')->with(['articles' => $articles, 'latests' => $latests]);
     }
 
     /**************************************************************************************
@@ -316,10 +325,13 @@ class HandleController extends Controller
      **/
     public function category_detail($slug='', Request $request)
     {
+        $latests =  Article::whereHas('category', function($query) use ($slug){
+            $query->where('slug', $slug);
+        })->where('active', 1)->orderBy('id', 'desc')->take(4)->get();
         $articles = Article::whereHas('category', function($query) use ($slug){
             $query->where('slug', $slug);
         })->where('active', 1)->paginate(10);
-        return view('category.detail-category')->with('articles', $articles);
+        return view('category.detail-category')->with(['articles' => $articles, 'latests' => $latests]);
     }
 
     /**************************************************************************************
@@ -332,12 +344,14 @@ class HandleController extends Controller
     {
         if ($request->has('q')) {
             $query = $request->get('q');
+            $latests = Article::where('title', 'like', '%'.$query.'%')->orWhere('description', 'like', '%'.$query.'%')->orWhere('content', 'like', '%'.$query.'%')->where('active', 1)->orderBy('id', 'desc')->take(4)->get();
             $articles = Article::where('title', 'like', '%'.$query.'%')->orWhere('description', 'like', '%'.$query.'%')->orWhere('content', 'like', '%'.$query.'%')->where('active', 1)->paginate(10);
-            return view('search.result')->with('articles', $articles);
+            return view('search.result')->with(['articles' => $articles, 'latests' => $latests]);
         }
         else{
+            $latests = Article::where('active', 1)->orderBy('id', 'desc')->take(4)->get();
             $articles = Article::where('active', 1)->paginate(10);
-            return view('search.result')->with('articles', $articles);
+            return view('search.result')->with(['articles' => $articles, 'latests' => $latests]);
         }
     }
 
@@ -394,6 +408,57 @@ class HandleController extends Controller
                 
             }
         }
+    }
+
+    //+user
+    public function logout()
+    {
+        if (Auth::check()) {
+            if (Auth::logout()) {
+                return redirect('/');
+            }else{
+                return redirect('/');
+            }
+        }else{
+            return redirect()->back();
+        }
+    }
+
+    public function user_detail(Request $request)
+    {
+        # code...
+    }
+
+    public function user_change_password(Request $request)
+    {
+        return view('user.change-password');
+    }
+
+    public function user_change_password_update(Request $request)
+    {
+        $message = array(
+            'old_password.exists' => 'Mật khẩu cũ không đúng. Vui lòng nhập chính xác mật khẩu đã đăng ký trước đó.'
+            );
+        $this->validate($request, [
+            'old_password' => 'required|exists:users,password',
+            'password' => 'required|min:8|max:20',
+            'password_confirmation' => 'required|same:password'
+            ], $message);
+
+        if (Auth::check()) {
+            $o_pass = $request->get('old_password');
+            $n_pass = $request->get('password');
+            $user = User::find(auth()->user()->id);
+            $user->password = bcrypt($n_pass);
+            if ($user->save()) {
+                redirect()->back()->with(['status' => 1, 'label' => 'success', 'message' => 'Thay đổi mật khẩu mới thành công. Bây giờ bạn có thể đăng nhập bằng mật khẩu vừa đổi.']);
+            }else{
+                redirect()->back()->with(['status' => 0, 'label' => 'danger', 'message' => 'Thay đổi mật khẩu mới không thành công. Vui lòng kiểm tra chính xác thông tin nhập vào.']);
+            }
+        }else{
+            return redirect()->back();
+        }
+        return view('user.change-password');
     }
 
 }

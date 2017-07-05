@@ -22,8 +22,9 @@
     {{--
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> --}} {{--
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet"> --}}
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald:300,400,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Oswald:100,300,400,600" rel="stylesheet">
     {!!Html::script('/public/js/lib/jq-ui.js')!!}
+    {!!Html::script('/public/js/lib/layout-masonry.min.js')!!}
     {!!Html::script('/public/js/gnlJpY4-pl-own.js')!!}
     {!!Html::script('/public/js/txB56mM-main.js')!!}
     @yield('style')
@@ -72,17 +73,18 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{Auth::user()->name}} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Profile</a></li>
-                                <li><a href="#">Post</a></li>
-                                <li>
+                                <li><a href="{{ route('ui.user.change-password') }}">Đổi mật khẩu</a></li>
+                                <li><a href="#">Thông tin tài khoản</a></li>
+                                <li><a href="{{ route('ui.logout') }}">Đăng xuất</a></li>
+                                {{-- <li>
                                 {!!Form::open(['url' => '/logout', 'method' => 'POST'])!!}
-                                    <button type="submit">Logout</button>
+                                    <button type="submit">Đăng xuất</button>
                                 {!!Form::close()!!}
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
                         @else
-                            <li><a href="{{ url('/login') }}" class="contribute">Login</a>
+                            <li><a href="{{ url('/login') }}" class="contribute">Đăng nhập</a>
                         </li>
                         @endif
                     </ul>
