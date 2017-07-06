@@ -179,7 +179,8 @@ class HandleController extends Controller
             'description.max' => 'Mô tả quá dài. Vui lòng thể hiện vào phần nội dung',
             'category.choose' => 'Hãy chọn một chủ đề cụ thể cho bài viết.',
             'content.min' => 'Nội dung quá ngắn. Hãy thể hiện lòng chân thành khi viết bài.',
-            'audio.mimes' => 'Định dạng tệp âm thanh chưa đúng. (.mp3, .wma, .GIF, .BMP, .JPEG)',
+            'audio.required' => 'Chọn một tệp tin âm thanh mp3 để upload.',
+            'audio.mimes' => 'Định dạng tệp âm thanh chưa đúng. (.mp3, .wma, .amr)',
             'audio.between' => 'Kích thướt ảnh quá nhỏ hoặc quá lớn (tối đa: 2:max)',
             'tags.mintag' => 'Nhập ít nhất một thẻ cho bài viết'
             );
@@ -189,7 +190,7 @@ class HandleController extends Controller
             'description' => 'min:10|max:500',
             'content' => 'min:100',
             'category' => 'choose',
-            'audio' => 'mimes:mpga|between:1,10240', 
+            'audio' => 'required|mimes:mpga|between:1,10240', 
             //'audio' => 'mimes:mpga,3gp,m4a,wav,wma,amr|between:1,10240',
 
             'tags' => 'required|mintag'
@@ -231,14 +232,13 @@ class HandleController extends Controller
     public function article_detail($slug="", Request $request)
     {
         $article = Article::where('slug', $slug)->where('active', 1)->get();
-        $sames = Article::whereHas('category', function($q) use($article){
-            $q->where('id', $article[0]->category[0]->id);
-        })->where('id', '<>', $article[0]->id)->get();
-        $comments = Comment::whereHas('article', function($q) use ($slug){
-            $q->where('slug', $slug);
-        })->where('parent', NULL)->paginate(10);
-
         if (count($article) > 0) {
+            $sames = Article::whereHas('category', function($q) use($article){
+                $q->where('id', $article[0]->category[0]->id);
+            })->where('id', '<>', $article[0]->id)->get();
+            $comments = Comment::whereHas('article', function($q) use ($slug){
+                $q->where('slug', $slug);
+            })->where('parent', NULL)->paginate(10);
             event(new ArticleStatEvent('view', $article[0]));
     	    return view('article.detail-article')->with(['article' => $article, 'comments' => $comments, 'sames' => $sames]);
         }else{
@@ -364,6 +364,15 @@ class HandleController extends Controller
      **/
     public function comment_store($slug, Request $request)
     {
+        if ($request->has('comment_edit') && !empty($request->get('comment_edit'))) {
+            $cmt = Comment::find($request->get('comment_edit'));
+            if ($cmt->count() > 0) {
+                $cmt->comment = $request->get('comment');
+                if ($cmt->save()) {
+                    return redirect(url()->previous().'#cmt_'.$request->get('comment_edit'));
+                }
+            }
+        }
         $article = Article::where('slug', $slug)->get();
         $comment = new Comment;
         $comment->comment = $request->comment;
@@ -373,7 +382,7 @@ class HandleController extends Controller
         $comment->active = 1;
         if ($comment->save()) {
             $comment->article()->attach($article[0]->id, array('user_id' => auth()->user()->id));
-            return redirect()->back();
+            return redirect(url()->previous().'#cmt_'.$comment->id);
         }
     }
 
@@ -385,7 +394,7 @@ class HandleController extends Controller
                 //Get id from comment to delete
                 $comment = Comment::find($request->get('id'));
                 //Check comment is a parent of orther comments, if parent then delete children comment
-                if (!is_null($comment->parent) || !empty($comment->parent)) {
+                if (is_null($comment->parent) || empty($comment->parent)) {
                     $child = Comment::where('parent', $comment->id)->get();
                     //Send id sub comment to ajax
                     $a = array();
@@ -493,11 +502,42 @@ class HandleController extends Controller
         }
     }
 
+    public function user_setting()
+    {
+        return view('user.setting')->with(['user' => auth()->user()]);
+    }
+
     public function user_deactivate(Request $request)
     {
         if (Auth::check()) {
             return view('user.deactivate')->with('user', Auth::user());
         }
+    }
+
+    public function user_manage(Request $request)
+    {
+        if (auth()->check()) {
+            $articles = Article::whereHas('user', function($q){
+                $q->where('id', auth()->user()->id);
+            })->orderBy('id', 'desc')->paginate(5);
+            $comments = Comment::whereHas('user', function($q){
+                $q->where('id', auth()->user()->id);
+            })->paginate(5, ['*'], 'cpage');
+            return view('user.manage')->with(['user'=>auth()->user(), 'articles' => $articles, 'comments' => $comments]);
+        }else{
+            return redirect()->back();
+        }
+    }
+
+
+    // +you
+    public function you_contribute(Request $request)
+    {
+        $ctb = $request->has('idea')?$request->get('idea'):NULL;
+        if (!empty($ctb)) {
+            
+        }
+        return view('user.contribute');
     }
 
 }

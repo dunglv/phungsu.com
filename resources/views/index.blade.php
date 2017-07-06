@@ -105,6 +105,7 @@
             </div>
         </footer>
     </div>
+    
     @yield('b-script')
 </body>
 

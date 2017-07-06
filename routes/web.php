@@ -74,6 +74,14 @@ Route::group(['middleware' => ['auth']], function() {
 		'as' => 'ui.user.deactivate',
 		'uses' => 'HandleController@user_deactivate'
 		]);
+	Route::get('/setting', [
+		'as' => 'ui.user.setting',
+		'uses' => 'HandleController@user_setting'
+		]);
+	Route::get('/manage', [
+		'as' => 'ui.user.manage',
+		'uses' => 'HandleController@user_manage'
+		]);
 });
 
 /**
@@ -132,6 +140,14 @@ Route::post('/article/{slug}/comment-save', [
 Route::get('/comment/handle-req-comment', [
 	'as' => 'ui.comment.handle-req-comment',
 	'uses' => 'HandleController@handle_req_comment'
+	]);
+
+/******************************************/
+/* +contribute
+/******************************************/
+Route::get('/your-ideas-to-contribute', [
+	'as' => 'ui.you.contribute',
+	'uses' => 'HandleController@you_contribute'
 	]);
 
 

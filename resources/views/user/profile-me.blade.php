@@ -6,15 +6,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-3">
-        <div class="sidebar">
-            <div class="list-group list-success">
-                <a href="{{ route('ui.user.detail') }}" class="list-group-item"><i class="fa fa-info"></i> Thông tin tài khoản</a>
-                <a href="{{ route('ui.user.change-password') }}" class="list-group-item "><i class="fa fa-key"></i> Thay đổi mật khẩu</a>
-                <a href="#" class="list-group-item"><i class="fa fa-cog"></i> Cài đặt</a>
-                <a href="#" class="list-group-item"><i class="fa fa-pencil"></i> Bài viết</a>
-                <a href="#" class="list-group-item"><i class="fa fa-briefcase"></i> Quản lý</a>
-            </div>
-        </div>
+       @include('user.sidebar')
     </div>
     {!!Form::open(array( 'route' => 'ui.user.update-detail', 'method' => 'POST', 'class' => '', 'files' => true ))!!}
         <div class="col-md-9">
@@ -174,22 +166,9 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Tài khoản</h3>
-                </div>
-                <div class="panel-body">
-                    <a href="{{ route('ui.user.deactivate') }}" class="btn btn-danger">Xóa tài khoản</a>
-                </div>
-            </div>
-
             <div class="form-group ">
                 <button type="submit" class="btn btn-success">Lưu thông tin</button>
             </div>
-            
-                
-            
-                
         </div>
     
     {!!Form::close()!!}

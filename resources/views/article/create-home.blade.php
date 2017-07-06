@@ -12,7 +12,7 @@
             <a href="{{ route('ui.article.upload-mp3') }}"><i class="fa fa-music"></i> Upload bài hát</a>
             <a href="{{ route('ui.article.upload-video') }}"><i class="fa fa-video-camera"></i> Upload Video</a>
             <a href="{{ route('ui.article.upload-image') }}"><i class="fa fa-camera"></i> Upload ảnh</a>
-            <a href="#"><i class="fa fa-inbox"></i> Đóng góp ý kiến</a>
+            <a href="{{ route('ui.you.contribute') }}"><i class="fa fa-inbox"></i> Đóng góp ý kiến</a>
         </div>
         <div class="row">
             <div class="block-ss block-page-create">

@@ -126,9 +126,11 @@
                                 <div class="form-group">
                                     <textarea name="comment" id="comment_input" class="form-control" rows="3" required="required" placeholder="Nhập ý kiến của bạn vào đây..."></textarea>
                                     <input type="hidden" name="parent">
+                                    <input type="hidden" name="comment_edit">
                                     <input type="hidden" name="article" value="{{$article[0]->id}}">
                                 </div>
-                                <button type="submit" class="btn btn-success">Gủi bình luận</button>
+                                @if($errors->has('comment')) <p><span class="error">{{$errors->first('comment')}}</span></p>@endif
+                                <button type="submit" class="btn btn-submit btn-success">Gủi bình luận</button>
                             {!!Form::close()!!}
                         </div>
                     @else
@@ -146,14 +148,15 @@
                                             <p><a href="#">{{$cmt->user[0]->name}}</a></p>
                                             <p>{{$cmt->created_at->format('d-m-Y H:i:s')}}</p>
                                         </div>
+                                        @if(auth()->check() && $cmt->user[0]->id === auth()->user()->id)
                                         <div class="cmt-opt">
                                             <span><i class="fa fa-ellipsis-v"></i></span>
                                             <ul>
                                                 <li class="cmt-delete" data-c = "{{$cmt->id}}"><a href="#"><i class="fa fa-remove"></i> Delete comment</a></li>
-                                                <li><a href="#"><i class="fa fa-pencil"></i> Edit comment</a></li>
-                                                <li><a href="#"><i class="fa fa-backward"></i> Report comment</a></li>
+                                                <li class="cmt-edit" data-c="{{$cmt->id}}"><a href="#"><i class="fa fa-pencil"></i> Edit comment</a></li>
                                             </ul>
                                         </div>
+                                        @endif
                                     </div>
                                     <div class="cmt-ct">
                                         {{$cmt->comment}}
@@ -173,14 +176,15 @@
                                                     <p><a href="#">{{$child->user[0]->name}}</a></p>
                                                     <p>{{$child->created_at->format('d-m-Y H:i:s')}}</p>
                                                 </div>
+                                                @if(auth()->check() &&  $child->user[0]->id === auth()->user()->id)
                                                 <div class="cmt-opt">
                                                     <span><i class="fa fa-ellipsis-v"></i></span>
                                                     <ul>
                                                         <li class="cmt-delete" data-c = "{{$child->id}}"><a href="#"><i class="fa fa-remove"></i> Delete comment</a></li>
-                                                        <li><a href="#"><i class="fa fa-pencil"></i> Edit comment</a></li>
-                                                        <li><a href="#"><i class="fa fa-backward"></i> Report comment</a></li>
+                                                        <li class="cmt-edit" data-c="{{$child->id}}"><a href="#"><i class="fa fa-pencil"></i> Edit comment</a></li>
                                                     </ul>
                                                 </div>
+                                                @endif
                                             </div>
                                             <div class="cmt-ct">
                                                 {{$child->comment}}
@@ -197,7 +201,6 @@
                         <p>Trở thành người đầu tiên bình luận bài viết này.</p>
                     @endif
                     {{$comments->links()}}
-                   
                 </div>
             </div>
             <div class="dt-fb">
@@ -285,6 +288,23 @@
                     })
                 }
             });
+        });
+
+        $('.cmt-edit').on('click', function(e){
+            e.preventDefault();
+            var id = $(this).data('c');
+            $('textarea[name="comment"]').focus().val($('#cmt_'+id).children('.cmt-ct').text().replace(/^\s+|\s+$/, ''));
+            if ($('.form-comment').find('.btn-edit').length === 0) {
+                $('.form-comment').addClass('form-edit').append('<span class="btn-edit error">Hủy bỏ chỉnh sửa</span>');
+                $('input[name="comment_edit"]').val(id);
+            }
+        });
+
+        $(document).on('click', '.btn-edit', function(){
+            $(this).remove();
+            $('.form-comment').removeClass('form-edit');
+            $('textarea[name="comment"]').val('');
+            $('input[name="comment_edit"]').val('');
         });
     });
 </script>
