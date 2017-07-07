@@ -14,7 +14,7 @@ Route::get('/',	[
 	'as' => 'ui.home',
 	'uses' => 'HandleController@home'
 	]);
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => 'auth'], function() {
     Route::get('/logout', [
     	'as' => 'ui.logout',
     	'uses' => 'HandleController@logout'
@@ -150,5 +150,61 @@ Route::get('/your-ideas-to-contribute', [
 	'uses' => 'HandleController@you_contribute'
 	]);
 
+
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
+    Route::get('/', ['as' => 'ad.home', 'uses' => 'AdminController@home']);
+
+    Route::get('/article', ['as' => 'ad.a.index', 'uses' => 'AdminController@article_home']);
+
+    Route::get('/article/create', ['as' => 'ad.a.create', 'uses' => 'AdminController@article_create']);
+
+    Route::get('/article/create-normal', ['as' => 'ad.a.create-normal', 'uses' => 'AdminController@article_create_normal']);
+
+    Route::post('/article/create-normal', ['as' => 'ad.a.create-normal-store', 'uses' => 'AdminController@article_create_normal_store']);
+
+    Route::get('/article/create-mp3', ['as' => 'ad.a.create-mp3', 'uses' => 'AdminController@article_create_mp3']);
+
+    Route::post('/article/create-mp3', ['as' => 'ad.a.create-mp3-store', 'uses' => 'AdminController@article_create_mp3_store']);
+
+    Route::get('/article/pending', ['as' => 'ad.a.pending', 'uses' => 'AdminController@article_pending']);
+
+    Route::get('/article/locked', ['as' => 'ad.a.locked', 'uses' => 'AdminController@article_locked']);
+
+    // +category
+    Route::get('/category', ['as' => 'ad.cate.index', 'uses' => 'AdminController@category_home']);
+
+    Route::get('/category/create', ['as' => 'ad.cate.create', 'uses' => 'AdminController@category_create']);
+
+    Route::post('/category/create', ['as' => 'ad.cate.create_store', 'uses' => 'AdminController@category_store']);
+
+    Route::get('/category/{id}/edit', ['as' => 'ad.cate.edit', 'uses' => 'AdminController@category_edit']);
+
+    Route::post('/category/{id}/edit', ['as' => 'ad.cate.create_update', 'uses' => 'AdminController@category_update']);
+
+    Route::get('/category/{id}/active', ['as' => 'ad.cate.active', 'uses' => 'AdminController@category_active']);
+
+    Route::get('/category/pending', ['as' => 'ad.cate.pending', 'uses' => 'AdminController@category_pending']);
+
+    Route::get('/category/locked', ['as' => 'ad.cate.locked', 'uses' => 'AdminController@category_locked']);
+
+    // +tag
+    Route::get('/tag', ['as' => 'ad.tag.index', 'uses' => 'AdminController@tag_home']);
+
+    Route::get('/tag/create', ['as' => 'ad.tag.create', 'uses' => 'AdminController@tag_create']);
+
+    Route::get('/tag/pending', ['as' => 'ad.tag.pending', 'uses' => 'AdminController@tag_pending']);
+
+    Route::get('/tag/locked', ['as' => 'ad.tag.locked', 'uses' => 'AdminController@tag_locked']);
+
+    // +user
+    Route::get('/user', ['as' => 'ad.u.index', 'uses' => 'AdminController@user_home']);
+
+    Route::get('/user/pending', ['as' => 'ad.u.pending', 'uses' => 'AdminController@user_pending']);
+
+    Route::get('/user/deactive', ['as' => 'ad.u.deactive', 'uses' => 'AdminController@user_deactive']);
+
+    Route::get('/user/locked', ['as' => 'ad.u.locked', 'uses' => 'AdminController@user_locked']);
+
+});
 
 Auth::routes();

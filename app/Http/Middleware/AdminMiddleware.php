@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
-class AuthArticleMiddleware
+class AdminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,7 +19,7 @@ class AuthArticleMiddleware
             if (Auth::user()->isAdmin()) {
                 return $next($request);
             }else{
-                return redirect('/');
+                return redirect()->intended();
             }
         }else{
             return redirect('/login');

@@ -36,4 +36,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Comment', 'article_comment');
     }
+
+    public function isAdmin()
+    {
+        // dd($this)
+        return (int)$this->auth === 1;
+    }
 }
