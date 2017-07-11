@@ -8,7 +8,17 @@
     <div class="col-md-12">
         <h3 class="" style="font-weight: 900;text-align: center;margin-bottom: 30px">Tạo thẻ bài viết mới</h3>
     </div>
-    {!!Form::open(array( 'route' => 'ad.a.create-normal-store', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true ))!!}
+    {!!Form::open(array( 'route' => 'ad.tag.store', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true ))!!}
+    {{-- Show message  --}}
+    @if(session()->has('status')) 
+        <div class="col-md-10 col-md-offset-1">
+            <div class="alert alert-{{session()->get('label')}}">
+                <strong style="text-transform: capitalize;">{{session()->get('label')}}!</strong> {{session()->get('message')}} {{session()->get('label')}} 
+            </div>
+            
+        </div>
+    @endif
+    {{-- end show message --}}
     <div class="col-md-9">
         <div class="form-group">
             <label for="inputEmail3" class="col-sm-2 control-label">Thẻ</label>
@@ -37,8 +47,7 @@
                  @if($errors->has('thumbnail') > 0)<span class="error">{{$errors->first('thumbnail')}}</span>@endif
             </div>
         </div>
-        @if(\Session::has('flash_error')) <span class="error">Add new category was failed</span>@endif
-         @if(\Session::has('flash_success')) <span class="success">Add new category successful</span>@endif
+        
     </div>
     <div class="col-md-3">
         <div class="sidebar">
@@ -48,32 +57,12 @@
                     <div class="radio">
                         <div class="bl-s-t">Cho phép bình luận</div>
                         <div class="radio-two">
-                            <input type="radio" name="opencomment" data-text="on"  value="1" checked="checked" >
-                            <input type="radio" name="opencomment" data-text="off"  value="0">
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="bl-ct">
-                    <div class="radio">
-                        <div class="bl-s-t">Cho phép chỉnh sửa</div>
-                        <div class="radio-two">
-                            <input type="radio" name="openedit" data-text="on" value="1">
-                            <input type="radio" name="openedit"  data-text="off" value="0" checked="checked">
-                        </div>
-                            
-                    </div>
-                </div>
-                <div class="bl-ct">
-                    <div class="radio">
-                        <div class="bl-s-t">Nhận thông báo từ bài viết</div>
-                        <div class="radio-two">
-                            <input type="radio" name="notify" data-text="on" value="1">
-                            <input type="radio" name="notify" data-text="off" value="0" checked="checked">
+                            <input type="radio" name="active" data-text="on"  value="1" checked="checked" >
+                            <input type="radio" name="active" data-text="off"  value="0">
                         </div>
                     </div>
                 </div>
-                
+               
                 <div class="bl-ct">
                     <button type="submit" class="btn btn-sm btn-success">Lưu</button>
                     <button type="button" class="btn btn-sm btn-danger">Hủy bỏ</button>

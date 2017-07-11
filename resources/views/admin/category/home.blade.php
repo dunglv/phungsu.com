@@ -29,8 +29,8 @@
 							</td>
 							<td>{{$c->active}}</td>
 							<td>
-								<a href="" class="btn btn-success">Kích hoạt</a>
-								<a href="" class="btn btn-primary">Chỉnh sửa</a>
+								<a href="{{ route('ad.cate.active', $c->id) }}" class="btn btn-success">Kích hoạt</a>
+								<a href="{{ route('ad.cate.edit', $c->id) }}" class="btn btn-primary">Chỉnh sửa</a>
 								<a href="" class="btn btn-danger">Xóa</a>
 							</td>
 						</tr>

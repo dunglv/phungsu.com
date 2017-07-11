@@ -56,12 +56,11 @@
                 <div class="bl-t">Hoạt động</div>
                 <div class="bl-ct">
                     <div class="radio">
-                        <div class="bl-s-t">Cho phép bình luận</div>
+                        <div class="bl-s-t">Kích hoạt bài viết</div>
                         <div class="radio-two">
-                            <input type="radio" name="opencomment" data-text="on"  value="1" checked="checked" >
-                            <input type="radio" name="opencomment" data-text="off"  value="0">
+                            <input type="radio" name="active" data-text="on"  value="1"  >
+                            <input type="radio" name="active" data-text="off"  value="0" checked="checked">
                         </div>
-                        
                     </div>
                 </div>
                 <div class="bl-ct">
@@ -72,15 +71,6 @@
                             <input type="radio" name="openedit"  data-text="off" value="0" checked="checked">
                         </div>
                             
-                    </div>
-                </div>
-                <div class="bl-ct">
-                    <div class="radio">
-                        <div class="bl-s-t">Nhận thông báo từ bài viết</div>
-                        <div class="radio-two">
-                            <input type="radio" name="notify" data-text="on" value="1">
-                            <input type="radio" name="notify" data-text="off" value="0" checked="checked">
-                        </div>
                     </div>
                 </div>
                 

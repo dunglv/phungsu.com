@@ -1,4 +1,4 @@
-@extends('admin.index') @section('title', 'Tạo mới chủ đề') 
+@extends('admin.index') @section('title', 'Cập nhật chủ đề chủ đề') 
 @section('b-script')
     {!!Html::style('/public/js/lib/jq-ui.css')!!}
     {!!Html::script('/public/js/handle-string.js')!!}
@@ -6,7 +6,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <h3 class="" style="font-weight: 900;text-align: center;margin-bottom: 30px">Tạo chủ đề mới</h3>
+        <h3 class="" style="font-weight: 900;text-align: center;margin-bottom: 30px">Cập nhật chủ đề</h3>
     </div>
     {{-- Show message  --}}
     @if(session()->has('status')) 
@@ -18,7 +18,7 @@
         </div>
     @endif
     {{-- end show message --}}
-    {!!Form::open(array( 'route' => 'ad.cate.create_store', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true ))!!}
+    {!!Form::open(array( 'route' => ['ad.cate.create_update', $category->id], 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true ))!!}
     <div class="col-md-9">
 
         <div class="form-group">
@@ -56,10 +56,10 @@
                 <div class="bl-t">Hoạt động</div>
                 <div class="bl-ct">
                     <div class="radio">
-                        <div class="bl-s-t">Cho phép bình luận</div>
+                        <div class="bl-s-t">Kích hoạt bài viết</div>
                         <div class="radio-two">
-                            <input type="radio" name="opencomment" data-text="on"  value="1" checked="checked" >
-                            <input type="radio" name="opencomment" data-text="off"  value="0">
+                            <input type="radio" name="active" data-text="on"  value="1" checked="checked" >
+                            <input type="radio" name="active" data-text="off"  value="0">
                         </div>
                         
                     </div>
@@ -74,16 +74,6 @@
                             
                     </div>
                 </div>
-                <div class="bl-ct">
-                    <div class="radio">
-                        <div class="bl-s-t">Nhận thông báo từ bài viết</div>
-                        <div class="radio-two">
-                            <input type="radio" name="notify" data-text="on" value="1">
-                            <input type="radio" name="notify" data-text="off" value="0" checked="checked">
-                        </div>
-                    </div>
-                </div>
-                
                 <div class="bl-ct">
                     <button type="submit" class="btn btn-sm btn-success">Lưu</button>
                     <button type="button" class="btn btn-sm btn-danger">Hủy bỏ</button>

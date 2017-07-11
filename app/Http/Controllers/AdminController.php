@@ -256,6 +256,122 @@ class AdminController extends Controller
         return view('admin.article.pending')->with(['articles'=>$articles]);
     }
 
+    public function article_edit_normal($id='')
+    {
+        $a = Article::find($id);
+        $cates = Category::all()->where('active', 1);
+        // dd($cates);
+        if ($a->count()  > 0) {
+            return view('admin.article.edit-normal')->with(['article'=>$a, 'cates' => $cates]);
+        }else{
+            return redirect()->back();
+        }
+    }
+
+    public function article_edit_normal_update($id, Request $request)
+    {
+        // dd(auth()->user()->id);
+        $title = $request->get('title');
+        $slug = $request->get('slug');
+        $desc = $request->get('description');
+        $content = $request->get('content');
+        $thumb = $request->file('thumbnail');
+        $cate = $request->get('category');
+        $tag = $request->get('tags');
+        $opencmt = $request->get('opencomment');
+        $openedit = $request->get('openedit');
+        $notify = $request->get('notify');
+        Validator::extend('choose', function($attribute, $value, $parameters, $validator){
+            return $value > 0;
+        });
+        Validator::extend('mintag', function($attribute, $value, $parameters, $validator){
+            $t = explode(',', $value);
+            if (count($t) < 1) {
+                return false;
+            }
+            return true;
+        });
+        $message = array(
+            'title.min' => 'Tiêu đề bài viết quá ngắn. Tối thiểu :min ký tự',
+            'title.max' => 'Tiêu đề bài viết quá dài. Tối đa :max ký tự',
+            'title.unique' => 'Dường như bài viết đã có trên website. Sử dụng chứ năng tìm kiếm để tra hoặc yêu cầu quyền chỉnh sửa bài viết từ tác giả.',
+            'slug.min' => 'Tiêu đề bài viết quá ngắn. Tối thiểu :min ký tự',
+            'slug.max' => 'Tiêu đề bài viết quá dài. Tối đa :max ký tự',
+            'description.min' => 'Mô tả quá ngắn để có cái nhìn tổng quát về bài viết.',
+            'description.max' => 'Mô tả quá dài. Vui lòng thể hiện vào phần nội dung',
+            'category.choose' => 'Hãy chọn một chủ đề cụ thể cho bài viết.',
+            'content.min' => 'Nội dung quá ngắn. Hãy thể hiện lòng chân thành khi viết bài.',
+            'thumbnail.mimes' => 'Định dạng ảnh chưa đúng. (.JPG, .PNG, .GIF, .BMP, .JPEG)',
+            'thumbnail.between' => 'Kích thướt ảnh quá nhỏ hoặc quá lớn (tối đa: 2:max)',
+            'tags.mintag' => 'Nhập ít nhất một thẻ cho bài viết'
+            );
+        $validate = $this->validate($request, [
+            'title' => 'required|min:10|max:200',
+            'slug' => 'required|min:10|max:200',
+            'description' => 'min:10|max:500',
+            'content' => 'min:100',
+            'category' => 'choose',
+            'thumbnail' => 'mimes:jpg,png,gif,bmp,jpeg|between:1,2048',
+            'tags' => 'required|mintag'
+            ], $message);
+        // if ($validate->fails()) {
+        //     return redirect()->back()->withErrors($validate)->withInput();
+        // }
+        $public_image_url = url('/').'/public/images/upload/article/';
+        $a = Article::find($id);
+        $a->title = $title;
+        $a->slug = $slug;
+        $a->description = $desc;
+        $a->format = 0;
+        $a->content = $content;
+        $a->user_id = auth()->user()->id;
+        $thumb = ($request->hasFile('thumbnail'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('thumbnail')->getClientOriginalName())).'.'.$request->file('thumbnail')->getClientOriginalExtension():NULL;
+        $a->thumbnail = $public_image_url.$thumb;
+        $a->opencomment = $request->get('opencomment');
+        $a->openedit = $request->get('openedit');
+        $a->notify = $request->get('notify');
+        // $a->active = $request->get('active');
+        if($a->save()){
+            // Handle tag and store pivot
+            $tgs = explode(',', $tag);
+            // for ($i=0; $i < count($tgs); $i++) { 
+            //     // $a->tags()->sync($tgs[$i]);
+            // }
+            $a->tags()->sync($tgs);
+            $a->category()->sync([$cate]);
+            if ($request->hasFile('thumbnail')) {
+                $request->file('thumbnail')->move(public_path().'/images/upload/article', $thumb);
+                // if (file_exists(filename)) {
+                //     # code...
+                // }
+            }
+            $a->stat()->save(new Stat(['article_id' => $a->id]));
+            return redirect()->route('ad.a.edit-normal', $id)->with(['status' => 1, 'label' => 'success', 'message' => 'Update article']);
+        }else{
+            return redirect()->back()->with(['status' => 0, 'label' => 'danger', 'message' => 'Update article']);
+        }
+    }
+
+    public function article_active($id='')
+    {
+        $a = Article::find($id);
+        if ($a->count() > 0) {
+            if ($a->active == 0) {
+                $a->active = 1;
+            }elseif($a->active == 1){
+                $a->active = 0;
+            }
+            if ($a->save()) {
+                return redirect()->back()->with(['status' => 1, 'label' => 'success', 'message' => 'Change state of article is']);
+            }else{
+                return redirect()->back()->with(['status' => 0, 'label' => 'danger', 'message' => 'Change state of article is']);
+
+            }
+        }else{
+            return redirect()->back();
+        }
+    }
+
     // +category
     public function category_home()
     {
@@ -284,7 +400,7 @@ class AdminController extends Controller
         $c->title = $request->get('title');
         $c->slug = $request->get('slug');
         $c->description = ($request->has('description'))?$request->get('description'):NULL;
-        $c->description = ($request->has('description'))?$request->get('description'):NULL;
+        $c->active = $request->get('active');
         $thumb = ($request->hasFile('thumbnail'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('thumbnail')->getClientOriginalName())).'.'.$request->file('thumbnail')->getClientOriginalExtension():NULL;
 
         if ($c->save()) {
@@ -307,9 +423,33 @@ class AdminController extends Controller
         }
     }
 
-    public function category_update(Request $request)
+    public function category_update($id = '', Request $request)
     {
-    	# code...
+    	$message = array();
+        $this->validate($request, [
+            'title' => 'required|min:2|max:200',
+            'description' => 'min:10|max:500',
+            'thumbnail' => 'mimes:jpg,jpeg,png,gif,bmp|between:1,10240'
+            //'audio' => 'mimes:mpga,3gp,m4a,wav,wma,amr|between:1,10240',
+
+            ], $message);
+        $public_audio_url = url('/').'/public/audio/upload/';
+
+        $c = Category::find($id);
+        $c->title = $request->get('title');
+        $c->slug = $request->get('slug');
+        $c->description = ($request->has('description'))?$request->get('description'):NULL;
+        $c->active = $request->get('active');
+        $thumb = ($request->hasFile('thumbnail'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('thumbnail')->getClientOriginalName())).'.'.$request->file('thumbnail')->getClientOriginalExtension():NULL;
+
+        if ($c->save()) {
+            if ($request->hasFile('thumbnail')) {
+                $request->file('thumbnail')->move(public_path().'/images/upload', $thumb);
+            }
+            return redirect()->back()->with(['status' => 1, 'message' => 'Update category', 'label' => 'success']);
+        }else{
+            return redirect()-back()->with(['status' => 0, 'message' => 'Update category', 'label' => 'error']);
+        }
     }
 
     public function category_active($id = '')
@@ -367,7 +507,31 @@ class AdminController extends Controller
 
     public function tag_store(Request $request)
     {
-    	# code...
+    	$message = array();
+        $this->validate($request, [
+            'title' => 'required|min:2|max:100',
+            'description' => 'min:10|max:200',
+            'thumbnail' => 'mimes:jpg,jpeg,png,gif,bmp|between:1,10240'
+            //'audio' => 'mimes:mpga,3gp,m4a,wav,wma,amr|between:1,10240',
+
+            ], $message);
+        $public_audio_url = url('/').'/public/audio/upload/';
+
+        $t = new Tag;
+        $t->title = $request->get('title');
+        $t->slug = $request->get('slug');
+        $t->description = ($request->has('description'))?$request->get('description'):NULL;
+        $t->active = $request->get('active');
+        $thumb = ($request->hasFile('thumbnail'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('thumbnail')->getClientOriginalName())).'.'.$request->file('thumbnail')->getClientOriginalExtension():NULL;
+
+        if ($t->save()) {
+            if ($request->hasFile('thumbnail')) {
+                $request->file('thumbnail')->move(public_path().'/images/upload', $thumb);
+            }
+            return redirect()->back()->with(['status' => 1, 'message' => 'Add new tag', 'label' => 'success']);
+        }else{
+            return redirect()-back()->with(['status' => 0, 'message' => 'Add new tag', 'label' => 'error']);
+        }
     }
 
     public function tag_edit($value='')
