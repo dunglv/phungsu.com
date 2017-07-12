@@ -10,12 +10,16 @@
 | contains the "web" middleware group. Now create something great!
 | +tag, +article, +user, +category
 */
+// foreach(File::allFiles(__DIR__, '/routes') as $partial)
+// {
+// dd (get_class_methods($partial));
+// }
+
 Route::get('/',	[
 	'as' => 'ui.home',
 	'uses' => 'HandleController@home'
 	]);
 
-Route::get('/home', 'HomeController@index');
 
 /******************************************/
 /* +search
@@ -69,4 +73,6 @@ if (file_exists(__DIR__.'/own-route/route-user.php')) {
 }
 
 Auth::routes();
+
+Route::get('/confirm-email-active', 'AdminController@activation_email');
 

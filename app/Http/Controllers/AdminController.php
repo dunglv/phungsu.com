@@ -11,6 +11,7 @@ use App\Stat;
 use App\Comment;
 use App\User;
 use Validator;
+use Mail;
 class AdminController extends Controller
 {
     public function __construct()
@@ -593,6 +594,15 @@ class AdminController extends Controller
     public function user_destroy($value='')
     {
     	# code...
+    }
+
+    public function activation_email()
+    {
+        Mail::send('article.create-home', ['title' => 'Test', 'message' => 'Test mesage'], function ($message)
+         {
+            $message->from('no-reply@scotch.io', 'Scotch.IO');
+            $message->to('vietdungchipro@gmail.com');
+        });
     }
 
 }
