@@ -30,7 +30,7 @@
 							<td><a href="#">{{$t->articles->count()}}</a></td>
 							<td>{{$t->active}}</td>
 							<td>
-								<a href="" class="btn btn-success">Kích hoạt</a>
+								<a href="" class="btn btn-success"><i class="fa fa-eye"></i> Kích hoạt</a>
 								<a href="" class="btn btn-primary">Chỉnh sửa</a>
 								<a href="" class="btn btn-danger">Xóa</a>
 							</td>

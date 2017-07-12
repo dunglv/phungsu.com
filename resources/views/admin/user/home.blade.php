@@ -5,6 +5,17 @@
 @section('content')
 <div class="container-fluid">
 	<div class="row">
+		{{-- Show message  --}}
+	    @if(session()->has('status')) 
+	        <div class="col-md-10 col-md-offset-1">
+	            <div class="alert alert-{{session()->get('label')}} alert-dismissable">
+	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+	                <strong style="text-transform: capitalize;">{{session()->get('label')}}!</strong> {{session()->get('message')}} {{session()->get('label')}} 
+	            </div>
+	            
+	        </div>
+	    @endif
+	    {{-- end show message --}}
 		<div class="col-md-12">
 			@if(isset($users))
 				@if($users->total() > 0)
@@ -42,9 +53,9 @@
 							<td>{{$u->active}}</td>
 							<td>{{$u->auth}}</td>
 							<td>
-								<a href="" class="btn btn-success">Kích hoạt</a>
-								<a href="" class="btn btn-primary">Chỉnh sửa</a>
-								<a href="" class="btn btn-danger">Xóa</a>
+								<a href="{{ route('ad.u.lock', $u->id) }}" class="btn btn-success"><i class="fa fa-lock"></i> Khóa</a>
+								<a href="{{ route('ad.u.auth', $u->id) }}" class="btn btn-primary">Thay đổi quyền</a>
+								<a href="{{ route('ad.u.delete', $u->id) }}" class="btn btn-danger"><i class="fa fa-remove"></i> Xóa khỏi hệ thống</a>
 							</td>
 						</tr>
 						@endforeach
