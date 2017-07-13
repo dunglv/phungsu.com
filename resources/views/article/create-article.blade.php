@@ -1,8 +1,36 @@
 @extends('index') @section('title', 'Đóng góp bài viết mới') 
 @section('b-script')
-    {!!Html::style('/public/js/lib/jq-ui.css')!!}
     {!!Html::script('/public/js/handle-string.js')!!}
+    {!!Html::script('/public/froala/js/froala_editor.min.js')!!}
+    {!!Html::script('/public/froala/js/languages/vi.js')!!}
+    {!!Html::script('/public/froala/js/plugins/font_family.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/font_size.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/image.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/paragraph_format.min.js')!!}
+    {{-- {!!Html::script('/public/froala/js/plugins/paragraph_style.min.js')!!} --}}
+    {!!Html::script('/public/froala/js/plugins/print.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/table.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/video.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/url.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/link.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/save.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/word_paste.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/emoticons.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/align.min.js')!!}
+    {!!Html::script('/public/froala/js/plugins/colors.min.js')!!}
 @stop 
+@section('style')
+    {!!Html::style('/public/js/lib/jq-ui.css')!!}
+    {!!Html::style('/public/froala/css/froala_editor.min.css')!!}
+    {!!Html::style('/public/froala/css/plugins/video.min.css')!!}
+    {!!Html::style('/public/froala/css/plugins/table.min.css')!!}
+    {!!Html::style('/public/froala/css/plugins/draggable.min.css')!!}
+    {!!Html::style('/public/froala/css/plugins/file.min.css')!!}
+    {!!Html::style('/public/froala/css/plugins/image.min.css')!!}
+    {!!Html::style('/public/froala/css/plugins/emoticons.min.css')!!}
+    {!!Html::style('/public/froala/css/plugins/line_breaker.min.css')!!}
+    {!!Html::style('/public/froala/css/plugins/colors.min.css')!!}
+@stop
 @section('content')
 <div class="row">
     <div class="col-md-12">
@@ -33,8 +61,13 @@
         <div class="form-group">
             <label for="inputPassword3" class="col-sm-2 control-label">Nội dung</label>
             <div class="col-sm-10">
-                <textarea name="content" id="input" class="form-control @if(!empty($errors->first('content'))) error-box @endif" rows="10" required="required" placeholder="Nội dung chi tiết bài viết...">{{old('content')}}</textarea>
+                <textarea name="content" id="content" class="form-control @if(!empty($errors->first('content'))) error-box @endif" rows="50" required="required" placeholder="Nội dung chi tiết bài viết...">{{old('content')}}</textarea>
                  @if($errors->has('content') > 0)<span class="error">{{$errors->first('content')}}</span>@endif
+                 <div class="btn btn-success btn-preview" style="margin-top: 10px;"><i class="fa fa-eye"></i> Xem trước</div>
+                 <div id="preview">
+                    <div class="btn-close" title="Đóng xem trước"><i class="fa fa-remove"></i></div>
+                     <div class="contain-preview"><span style="color: #ccc;font-size:1.2em;">Chưa có nội dung để hiển thị</span></div>
+                 </div>
             </div>
         </div>
         <div class="form-group">
@@ -119,8 +152,72 @@
     </div>
     {!!Form::close()!!}
 </div>
+<style>
+  .class1 tbody tr:nth-child(2n) {
+    background: #f9f9f9;
+  }
+ 
+  .class2 thead tr th, .class2 tbody tr td  {
+    border-style: dashed;
+  }
+  .fr-view table td, .fr-view table th{
+        border: 1px solid #dddddd;
+  }
+  table th, table td{
+    padding: 2px 5px;
+    vertical-align: middle;
+  }
+  .fr-view span.fr-emoticon {
+    font-weight: normal;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "NotoColorEmoji", "Segoe UI Symbol", "Android Emoji", "EmojiSymbols";
+    display: inline;
+    line-height: 0;
+}
+.fr-view span.fr-emoticon.fr-emoticon-img {
+    background-repeat: no-repeat !important;
+    font-size: inherit;
+    height: 1em;
+    width: 1em;
+    min-height: 20px;
+    min-width: 20px;
+    display: inline-block;
+    margin: -0.1em 0.1em 0.1em;
+    line-height: 1;
+    vertical-align: middle;
+}
+</style>
 <script>
     $(function(){
+        $('#content').froalaEditor({
+            heightMin: 300,
+            language: 'vi',
+              fontFamilySelection: true,
+              fontSizeSelection: true,
+              paragraphFormatSelection: true,
+              imageEditButtons: ['imageDisplay', 'imageAlign', 'imageInfo', 'imageRemove'],
+               tableStyles: {
+                    class1: 'Class 1',
+                    class2: 'Class 2'
+                  },
+        }).on('froalaEditor.contentChanged', function (e, editor) {
+              $('.contain-preview').html(editor.html.get());
+            });
+        $('.btn-preview').on('click', function(){
+            if ($('#preview').hasClass('display')) {
+                $('#preview').removeClass('display');
+            }else{
+                $('#preview').addClass('display')
+            }
+        });
+        $('#preview').on('click', function(e){
+            if (e.target == this) {
+                $('#preview').removeClass('display');
+            }
+        });
+        $('.btn-close').on('click', function(e){
+            $('#preview').removeClass('display');
+        });
+
         $('input[name="title"]').on('change', function(e){
             var t = slug($(this).val());
                 $('input[name="slug"]').val(t);

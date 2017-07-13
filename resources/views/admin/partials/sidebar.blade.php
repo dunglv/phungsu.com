@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">
+        <a class="navbar-brand" href="{{ route('ui.home') }}" title="Ghé thăm website" target="_blank">
             {!!Html::image('/public/images/ui/logo.png')!!}
             <span>Phụng sự</span>
         </a>

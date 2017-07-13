@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                            Dashboard <small>Statistics Overview</small>
+                            Quản lý <small>Thống kê tổng quan</small>
                         </h1>
             <ol class="breadcrumb">
                 <li class="active">
@@ -32,8 +32,8 @@
                             <i class="fa fa-comments fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">26</div>
-                            <div>New Comments!</div>
+                            <div class="huge">{{$comments->count()}}</div>
+                            <div>Bình luận</div>
                         </div>
                     </div>
                 </div>
@@ -54,8 +54,8 @@
                             <i class="fa fa-tasks fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">12</div>
-                            <div>New Tasks!</div>
+                            <div class="huge">{{$articles->count()}}</div>
+                            <div>Đóng góp</div>
                         </div>
                     </div>
                 </div>
@@ -73,11 +73,11 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-3">
-                            <i class="fa fa-shopping-cart fa-5x"></i>
+                            <i class="fa fa-user fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">124</div>
-                            <div>New Orders!</div>
+                            <div class="huge">{{$users->count()}}</div>
+                            <div>Thành viên</div>
                         </div>
                     </div>
                 </div>
@@ -95,11 +95,11 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-3">
-                            <i class="fa fa-support fa-5x"></i>
+                            <i class="fa fa-globe fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">13</div>
-                            <div>Support Tickets!</div>
+                            <div class="huge">130</div>
+                            <div>Lượt ghé thăm</div>
                         </div>
                     </div>
                 </div>
@@ -129,60 +129,49 @@
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-4">
-            <div class="panel panel-default">
+            <div class="panel panel-warning">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Donut Chart</h3>
+                    <h3 class="panel-title"><i class="fa fa-pencil fa-fw"></i> Đóng góp gần đây</h3>
                 </div>
                 <div class="panel-body">
-                    <div id="morris-donut-chart"></div>
+                    <div class="list-group">
+                    @if(isset($latest_a) && $latest_a->count() > 0)
+                        @foreach($latest_a as $a)
+                        <a href="{{ route('ui.article.detail', $a->slug) }}" class="list-group-item">
+                            <span class="badge">{{$a->created_at->format('d-m-Y')}}</span>
+                            <i class="fa fa-fw fa-bitcoin"></i> {{$a->title}}
+                        </a>
+                        @endforeach
+                    @else
+                    <p>Chưa có đóng góp nào</p>
+                    @endif
+                    </div>
                     <div class="text-right">
-                        <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('ad.a.index') }}">Xem thêm đóng góp <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-4">
-            <div class="panel panel-default">
+            <div class="panel panel-danger">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i> Tasks Panel</h3>
+                    <h3 class="panel-title"><i class="fa fa-comment-o fa-fw"></i> Bình luận gần đây</h3>
                 </div>
                 <div class="panel-body">
                     <div class="list-group">
+                     @if(isset($latest_c) && $latest_c->count() > 0)
+                        @foreach($latest_c as $c)
                         <a href="#" class="list-group-item">
-                            <span class="badge">just now</span>
-                            <i class="fa fa-fw fa-calendar"></i> Calendar updated
+                            <span class="badge">{{$c->created_at->format('d-m-Y')}}</span>
+                            <i class="fa fa-fw fa-comment-o"></i> {{$c->comment}}
                         </a>
-                        <a href="#" class="list-group-item">
-                            <span class="badge">4 minutes ago</span>
-                            <i class="fa fa-fw fa-comment"></i> Commented on a post
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <span class="badge">23 minutes ago</span>
-                            <i class="fa fa-fw fa-truck"></i> Order 392 shipped
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <span class="badge">46 minutes ago</span>
-                            <i class="fa fa-fw fa-money"></i> Invoice 653 has been paid
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <span class="badge">1 hour ago</span>
-                            <i class="fa fa-fw fa-user"></i> A new user has been added
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <span class="badge">2 hours ago</span>
-                            <i class="fa fa-fw fa-check"></i> Completed task: "pick up dry cleaning"
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <span class="badge">yesterday</span>
-                            <i class="fa fa-fw fa-globe"></i> Saved the world
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <span class="badge">two days ago</span>
-                            <i class="fa fa-fw fa-check"></i> Completed task: "fix error on sales page"
-                        </a>
+                        @endforeach
+                    @else
+                    <p>Chưa có bình luận nào</p>
+                    @endif
                     </div>
                     <div class="text-right">
-                        <a href="#">View All Activity <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="">Xem thêm bình luận <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -257,6 +246,19 @@
                     </div>
                     <div class="text-right">
                         <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Donut Chart</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="morris-donut-chart"></div>
+                    <div class="text-right">
+                        <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>

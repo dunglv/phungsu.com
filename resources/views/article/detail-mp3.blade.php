@@ -121,6 +121,7 @@
                 <div class="cmt-t"><label>Comments ({{$article[0]->comments->count()}})</label> <span><i class="fa fa-chevron-down"></i></span></div>
                 <div class="cmt-list">
                      @if(Auth::check())
+                        @if($article[0]->opencomment === 1)
                         <div class="form-comment">
                             {!!Form::open(['method'=>'POST', 'route'=> ['ui.comment.store', 'slug' => $article[0]->slug]])!!}
                                 <div class="form-group">
@@ -133,6 +134,11 @@
                                 <button type="submit" class="btn btn-submit btn-success">Gủi bình luận</button>
                             {!!Form::close()!!}
                         </div>
+                        @else
+                            <div class="not-cc">
+                                Tác giả đã tắt tính năng bình luận cho bài viết này. Liên hệ tác giả hoặc quản lý website để biết thêm chi tiết.
+                            </div>
+                        @endif
                     @else
                         <p>Đăng nhập tại <a href="{{ url('/login') }}">đây</a> và bình luận bài viết này.</p>
                     @endif

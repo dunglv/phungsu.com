@@ -42,4 +42,9 @@ class User extends Authenticatable
         // dd($this)
         return (int)$this->auth === 1;
     }
+
+    public function active_users()
+    {
+        return $this->hasMany('App\ActiveUser', 'user_id');
+    }
 }

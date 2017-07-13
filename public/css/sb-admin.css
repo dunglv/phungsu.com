@@ -244,5 +244,8 @@ ul.alert-dropdown {
 }
 .navbar-brand span{
      color: #4caf50;
-    /*display: inline-block;*/
+     display: inline-block;
+     margin-top: 10px;
+     float: right;
+     margin-left: 5px;
 }

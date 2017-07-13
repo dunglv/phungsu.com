@@ -12,6 +12,7 @@ use App\Comment;
 use App\User;
 use Validator;
 use Mail;
+use App\Mail\UserMail;
 class AdminController extends Controller
 {
     public function __construct()
@@ -21,7 +22,13 @@ class AdminController extends Controller
     }
     public function home()
     {
-    	return view('admin.partials.home');
+        $users = User::all();
+        $articles = Article::all();
+        $comments = Comment::all();
+        $latest_a = Article::where('active', 1)->orderBy('id', 'desc')->take(10)->get();
+        $latest_u = User::where('active', 1)->orderBy('id', 'desc')->take(10)->get();
+        $latest_c = Comment::where('active', 1)->orderBy('id', 'desc')->take(10)->get();
+    	return view('admin.partials.home')->with(array('articles' => $articles, 'users' => $users, 'comments' => $comments, 'latest_a' => $latest_a, 'latest_u' => $latest_u, 'latest_c' => $latest_c));
     }
 
     // +article
@@ -689,13 +696,32 @@ class AdminController extends Controller
     	# code...
     }
 
-    public function activation_email()
+
+    public function finish_register()
     {
-        Mail::send('article.create-home', ['title' => 'Test', 'message' => 'Test mesage'], function ($message)
-         {
-            $message->from('no-reply@scotch.io', 'Scotch.IO');
-            $message->to('vietdungchipro@gmail.com');
-        });
+        return view('mail.register-finish');
+    }
+
+    public function activation_email_do(Request $request)
+    {
+        if ($request->has('email') && $request->has('key')) {
+            $email = $request->get('email');
+            $key = $request->get('key');
+            $user = User::whereHas('active_users', function($q) use($key){
+                $q->where('key', $key);
+            })->where('email', $email)->get();
+
+            if ($user->count() > 0) {
+                $user[0]->active = 1;
+                // $user[0]->active_users()->active = 1;
+                $user[0]->active_users(['active'=>1])->save();
+                $user[0]->save();
+            }
+        }
+    }
+    public function activation_email_success()
+    {
+        return view('mail.active-user');
     }
 
 }

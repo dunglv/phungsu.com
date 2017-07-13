@@ -73,6 +73,9 @@ if (file_exists(__DIR__.'/own-route/route-user.php')) {
 }
 
 Auth::routes();
+Route::get('/user/finish-register', ['uses' => 'AdminController@finish_register', 'as' => 'ui.user.finish-register']);
 
-Route::get('/confirm-email-active', 'AdminController@activation_email');
+Route::get('/confirm-email-active', ['uses'=>'AdminController@activation_email_do', 'as' => 'ui.user.confirm_email']);
+
+Route::get('/success-active', ['uses' => 'AdminController@activation_email_success', 'as' => 'ui.user.success-active']);
 

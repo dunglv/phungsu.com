@@ -40,7 +40,10 @@ footer {
     padding-top: 20px;
     padding-bottom: 20px;
 }
-
+table th, table td{
+    border: 1px solid #ddd;
+    padding: 2px 5px;
+}
 a:hover,
 a:active,
 a:focus {

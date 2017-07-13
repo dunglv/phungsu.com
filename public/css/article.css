@@ -89,7 +89,7 @@
 }
 
 .bl-dt .dt-ct {
-    font-size: 1.2em;
+    font-size: 1.1em;
     color: #333;
     text-align: justify;
 }
@@ -497,6 +497,7 @@
 .block-ss.block-page-create {
     background: url(../images/ui/yu0kYej.png) no-repeat bottom right;
 }
+
 .block-ss.block-page-create .block-tt h3,
 .block-ss.block-ss.block-page-create .block-tt span {
     font-size: 1.3em;
@@ -531,4 +532,88 @@
 
 .block-ss.block-page-create .h-item.h-horizontal .h-i-item {
     padding-bottom: 0;
+}
+
+.not-cc {
+    padding: 10px 5px;
+    border: 1px dashed #ccc;
+    color: #5d5d5d;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 20px;
+    background: #f1f1f1;
+    font-weight: 700;
+}
+
+
+/*Custom icon*/
+
+span.fr-emoticon {
+    font-weight: normal;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "NotoColorEmoji", "Segoe UI Symbol", "Android Emoji", "EmojiSymbols";
+    display: inline;
+    line-height: 0;
+}
+
+span.fr-emoticon.fr-emoticon-img {
+    background-repeat: no-repeat !important;
+    font-size: inherit;
+    height: 1em;
+    width: 1em;
+    min-height: 20px;
+    min-width: 20px;
+    display: inline-block;
+    margin: -0.1em 0.1em 0.1em;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+#preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: 0.2s;
+    -o-transition: 0.2s;
+    transition: 0.2s;
+}
+
+#preview.display {
+    opacity: 1;
+    visibility: visible;
+    -webkit-transition: 0.2s;
+    -o-transition: 0.2s;
+    transition: 0.2s;
+}
+#preview .btn-close{
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background: #F44336;
+    color: #fff;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    line-height: 38px;
+    border-radius: 100%;
+    font-size: 22px;
+    cursor: pointer;
+
+}
+#preview .contain-preview {
+    background: #fff;
+    max-width: 70%;
+    max-height: 95%;
+    display: block;
+    margin: auto;
+    padding: 30px 20px;
+    margin-top: 50px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    overflow: hidden;
 }
