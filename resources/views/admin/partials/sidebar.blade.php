@@ -95,20 +95,20 @@
             </ul>
         </li>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{auth()->user()->name}} <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                    <a href="{{ route('ad.u.profile') }}"><i class="fa fa-fw fa-user"></i> Thông tin cá nhân</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                    <a href="{{ route('ad.u.change-password') }}"><i class="fa fa-fw fa-lock"></i> Thay đổi mật khẩu</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                    <a href="#"><i class="fa fa-fw fa-envelope"></i> Hộp thư</a>
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    <a href="{{ route('ui.logout') }}"><i class="fa fa-fw fa-power-off"></i> Đăng xuất</a>
                 </li>
             </ul>
         </li>
@@ -130,7 +130,7 @@
                 <a href="javascript:;" data-toggle="collapse" data-target="#demo" @if($curSeg==="article") aria-expanded="true" @endif><i class="fa fa-pencil"></i> Bài viết <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="demo" class="collapse @if($curSeg==="article") in @endif" @if($curSeg==="article") aria-expanded="true" @endif>
                     <li>
-                        <a href="{{ route('ad.a.create') }}">Thêm bài viết mới</a>
+                        <a href="{{ route('ui.create') }}" target="_blank">Thêm bài viết mới</a>
                     </li>
                     <li>
                         <a href="{{ route('ad.a.index') }}">Tất cả bài viết</a>

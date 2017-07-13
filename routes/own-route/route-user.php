@@ -64,4 +64,21 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
 		'as' => 'ad.u.delete',
 		'uses' => 'AdminController@user_delete'
 		]);
+	Route::get('user/profile', [
+		'as' => 'ad.u.profile',
+		'uses' => 'AdminController@user_profile'
+		]);
+	Route::post('user/profile', [
+		'as' => 'ad.u.profile_update',
+		'uses' => 'AdminController@user_profile_update'
+		]);
+
+	Route::get('user/change-password', [
+		'as' => 'ad.u.change-password',
+		'uses' => 'AdminController@user_change_password'
+		]);
+	Route::post('user/change-password', [
+		'as' => 'ad.u.change-password-update',
+		'uses' => 'AdminController@user_change_password_update'
+		]);
 });

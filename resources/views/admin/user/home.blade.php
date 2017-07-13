@@ -5,17 +5,27 @@
 @section('content')
 <div class="container-fluid">
 	<div class="row">
-		{{-- Show message  --}}
-	    @if(session()->has('status')) 
-	        <div class="col-md-10 col-md-offset-1">
-	            <div class="alert alert-{{session()->get('label')}} alert-dismissable">
-	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-	                <strong style="text-transform: capitalize;">{{session()->get('label')}}!</strong> {{session()->get('message')}} {{session()->get('label')}} 
-	            </div>
-	            
-	        </div>
-	    @endif
-	    {{-- end show message --}}
+		<div class="col-md-12">
+            <h1 class="page-header">
+                Quản lý <small>Thành viên</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i> Trang chủ
+                </li>
+                <li >
+                    Thành viên
+                </li>
+            </ol>
+            {{-- Show message  --}}
+           @if(session()->has('status'))
+                <div class="alert alert-{{session()->get('alert')}}">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>{{session()->get('label')}}!</strong> {{session()->get('message')}}
+                </div>
+            @endif
+            {{-- end show message --}}
+        </div>
 		<div class="col-md-12">
 			@if(isset($users))
 				@if($users->total() > 0)

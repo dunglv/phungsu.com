@@ -6,6 +6,27 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
+            <h1 class="page-header">
+                Quản lý <small>Bài viết đã khóa</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i> Trang chủ
+                </li>
+                <li class="active">
+                    Bài viết đã khóa
+                </li>
+            </ol>
+        </div>
+		<div class="col-md-12">
+			{{-- Show message  --}}
+		   @if(session()->has('status'))
+	            <div class="alert alert-{{session()->get('alert')}}">
+	                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	                <strong>{{session()->get('label')}}!</strong> {{session()->get('message')}}
+	            </div>
+	        @endif
+		    {{-- end show message --}}
 			@if(isset($articles))
 				@if($articles->total() > 0)
 				<table class="table table-striped table-hover">

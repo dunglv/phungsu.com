@@ -5,17 +5,27 @@
 @section('content')
 <div class="container-fluid">
 	<div class="row">
-    {{-- Show message  --}}
-    @if(session()->has('status')) 
-        <div class="col-md-10 col-md-offset-1">
-            <div class="alert alert-{{session()->get('label')}} alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <strong style="text-transform: capitalize;">{{session()->get('label')}}!</strong> {{session()->get('message')}} {{session()->get('label')}} 
-            </div>
-            
+    	<div class="col-md-12">
+            <h1 class="page-header">
+                Quản lý <small>Thành viên đã khóa</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i> Trang chủ
+                </li>
+                <li >
+                    Thành viên đã khóa
+                </li>
+            </ol>
+            {{-- Show message  --}}
+           @if(session()->has('status'))
+                <div class="alert alert-{{session()->get('alert')}}">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>{{session()->get('label')}}!</strong> {{session()->get('message')}}
+                </div>
+            @endif
+            {{-- end show message --}}
         </div>
-    @endif
-    {{-- end show message --}}
 		<div class="col-md-12">
 			@if(isset($users))
 				@if($users->total() > 0)
@@ -54,7 +64,6 @@
 							<td>{{$u->auth}}</td>
 							<td>
 								<a href="{{ route('ad.u.lock', $u->id) }}" class="btn btn-success"><i class="fa fa-unlock"></i> Kích hoạt</a>
-								<a href="{{ route('ad.u.auth', $u->id) }}" class="btn btn-primary">Thay đổi quyền</a>
 								<a href="{{ route('ad.u.delete', $u->id) }}" class="btn btn-danger">Xóa</a>
 							</td>
 						</tr>

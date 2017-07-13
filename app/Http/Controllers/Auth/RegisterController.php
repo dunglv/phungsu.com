@@ -66,24 +66,24 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        // $key = Helper::str_rand(100);
-        // $user = User::create([
-        //     'name' => $data['name'],
-        //     'email' => $data['email'],
-        //     'password' => bcrypt($data['password']),
-        // ]);
-        // $user->active_users()->save(new ActiveUser([
-        //     'key' => $key
-        //     ]));
-        // Mail::to($data['email'])->send(new UserMail($key, $data['email']));
-        // if ($user) {
-        //     return redirect()->route('ui.user.finish-register');
-        // }
-
-        return User::create([
+        $key = Helper::str_rand(100);
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+        $user->active_users()->save(new ActiveUser([
+            'key' => $key
+            ]));
+        Mail::to($data['email'])->send(new UserMail($key, $data['email']));
+        if ($user) {
+            return redirect()->route('ui.user.finish-register');
+        }
+
+        // return User::create([
+        //     'name' => $data['name'],
+        //     'email' => $data['email'],
+        //     'password' => bcrypt($data['password']),
+        // ]);
     }
 }

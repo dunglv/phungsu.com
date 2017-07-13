@@ -177,6 +177,30 @@
             </div>
         </div>
         <div class="col-lg-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-user fa-fw"></i> Thành viên</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="list-group">
+                     @if(isset($latest_u) && $latest_u->count() > 0)
+                        @foreach($latest_u as $u)
+                        <a href="#" class="list-group-item">
+                            <span class="badge">{{$u->created_at->format('d-m-Y')}}</span>
+                            <i class="fa fa-fw fa-user"></i> {{$u->name}}
+                        </a>
+                        @endforeach
+                    @else
+                    <p>Chưa có thành viên nào</p>
+                    @endif
+                    </div>
+                    <div class="text-right">
+                        <a href="">Xem thêm thành viên <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
@@ -250,7 +274,7 @@
                 </div>
             </div>
         </div>
-         <div class="col-lg-12">
+         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Donut Chart</h3>

@@ -1,19 +1,32 @@
-@extends('index')
+@extends('admin.index')
 
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Quản lý <small>Thay đổi mật khẩu</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i> Trang chủ
+                </li>
+                <li class="active">
+                    Thông tin cá nhân
+                </li>
+            </ol>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+            @if(session()->has('status'))
+                <div class="alert alert-{{session()->get('alert')}}">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>{{session()->get('label')}}!</strong> {{session()->get('message')}}
+                </div>
+            @endif
             <div class="panel panel-default">
                 <div class="panel-heading">Thay đổi mật khẩu</div>
-
                 <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-{{session('label')}}">
-                            {{ session('message') }}
-                        </div>
-                    @endif
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('ui.user.change-password-update')}}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('ad.u.change-password-update')}}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('old_password') ? ' has-error' : '' }}">
@@ -62,7 +75,7 @@
                                 <button type="submit" class="btn btn-success">
                                     Thay đổi mật khẩu
                                 </button>
-                                <a class="btn btn-danger" href="{{ url('/') }}">Hủy</a>
+                                <a class="btn btn-danger" href="{{ route('ad.home') }}">Hủy</a>
                             </div>
                         </div>
                     </form>

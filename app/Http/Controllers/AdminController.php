@@ -26,7 +26,7 @@ class AdminController extends Controller
         $articles = Article::all();
         $comments = Comment::all();
         $latest_a = Article::where('active', 1)->orderBy('id', 'desc')->take(10)->get();
-        $latest_u = User::where('active', 1)->orderBy('id', 'desc')->take(10)->get();
+        $latest_u = User::where('auth', 0)->orderBy('id', 'desc')->take(10)->get();
         $latest_c = Comment::where('active', 1)->orderBy('id', 'desc')->take(10)->get();
     	return view('admin.partials.home')->with(array('articles' => $articles, 'users' => $users, 'comments' => $comments, 'latest_a' => $latest_a, 'latest_u' => $latest_u, 'latest_c' => $latest_c));
     }
@@ -261,7 +261,7 @@ class AdminController extends Controller
     public function article_locked($value='')
     {
     	$articles = Article::where('active', 2)->paginate(10);
-        return view('admin.article.pending')->with(['articles'=>$articles]);
+        return view('admin.article.locked')->with(['articles'=>$articles]);
     }
 
     public function article_edit_normal($id='')
@@ -354,9 +354,9 @@ class AdminController extends Controller
                 // }
             }
             $a->stat()->save(new Stat(['article_id' => $a->id]));
-            return redirect()->route('ad.a.edit-normal', $id)->with(['status' => 1, 'label' => 'success', 'message' => 'Update article']);
+            return redirect()->route('ad.a.edit-normal', $id)->with(['status' => 1, 'label' => 'Thành công', 'alert' => 'success', 'message' => 'Cập nhật bài viết thành công']);
         }else{
-            return redirect()->back()->with(['status' => 0, 'label' => 'danger', 'message' => 'Update article']);
+            return redirect()->back()->with(['status' => 0, 'label' => 'Lỗi', 'alert' => 'danger', 'message' => 'Cập nhật bài viết không thành công']);
         }
     }
 
@@ -370,10 +370,9 @@ class AdminController extends Controller
                 $a->active = 0;
             }
             if ($a->save()) {
-                return redirect()->back()->with(['status' => 1, 'label' => 'success', 'message' => 'Change state of article is']);
+                return redirect()->back()->with(['status' => 1, 'label' => 'Thành công', 'alert' => 'success', 'message' => 'Thay đổi trạng thái bài viết thành công']);
             }else{
-                return redirect()->back()->with(['status' => 0, 'label' => 'danger', 'message' => 'Change state of article is']);
-
+                return redirect()->back()->with(['status' => 0, 'label' => 'Lỗi', 'alert' => 'danger', 'message' => 'Thay đôi trạng thái bài viết không thành công']);
             }
         }else{
             return redirect()->back();
@@ -415,9 +414,9 @@ class AdminController extends Controller
             if ($request->hasFile('thumbnail')) {
                 $request->file('thumbnail')->move(public_path().'/images/upload', $thumb);
             }
-            return redirect()->back()->with(['status' => 1, 'message' => 'Add new category', 'label' => 'success']);
+            return redirect()->back()->with(['status' => 1, 'alert' => 'success', 'message' => 'Thêm chủ đề thành công', 'label' => 'Thành công']);
         }else{
-            return redirect()-back()->with(['status' => 0, 'message' => 'Add new category', 'label' => 'error']);
+            return redirect()-back()->with(['status' => 0, 'alert' => 'danger', 'message' => 'Thêm chủ đề thất bại', 'label' => 'Lỗi']);
         }
     }
 
@@ -454,9 +453,9 @@ class AdminController extends Controller
             if ($request->hasFile('thumbnail')) {
                 $request->file('thumbnail')->move(public_path().'/images/upload', $thumb);
             }
-            return redirect()->back()->with(['status' => 1, 'message' => 'Update category', 'label' => 'success']);
+            return redirect()->back()->with(['status' => 1, 'alert' => 'success', 'message' => 'Cập nhật chủ đề thành công', 'label' => 'Thành công']);
         }else{
-            return redirect()-back()->with(['status' => 0, 'message' => 'Update category', 'label' => 'error']);
+            return redirect()-back()->with(['status' => 0, 'alert' => 'danger', 'message' => 'Cập nhật chủ đề thất bại', 'label' => 'Lỗi']);
         }
     }
 
@@ -470,9 +469,9 @@ class AdminController extends Controller
                 $c->active = 0;
             }
             if($c->save()){
-                 return redirect()->back()->with(['status' => 1, 'message' => 'Change status category', 'label' => 'success']);;
+                 return redirect()->back()->with(['status' => 1, 'alert' => 'success', 'message' => 'Thay đổi trạng thái chủ đề thành công', 'label' => 'Thành công']);
             }else{
-                 return redirect()->back()->with(['status' => 0, 'message' => 'Change status', 'label' => 'error']);;
+                 return redirect()->back()->with(['status' => 0, 'alert' => 'danger', 'message' => 'Thay đổi trạng thái chủ đề thất bại', 'label' => 'Lỗi']);
             }
         }else{
             return redirect()->back();
@@ -536,9 +535,9 @@ class AdminController extends Controller
             if ($request->hasFile('thumbnail')) {
                 $request->file('thumbnail')->move(public_path().'/images/upload', $thumb);
             }
-            return redirect()->back()->with(['status' => 1, 'message' => 'Add new tag', 'label' => 'success']);
+            return redirect()->back()->with(['status' => 1, 'message' => 'Thêm mới thẻ thành công', 'alert' => 'success', 'label' => 'Thành công']);
         }else{
-            return redirect()-back()->with(['status' => 0, 'message' => 'Add new tag', 'label' => 'error']);
+            return redirect()-back()->with(['status' => 0, 'message' => 'Thêm mới thẻ không thành công', 'alert' => 'danger', 'label' => 'Lỗi']);
         }
     }
 
@@ -575,22 +574,22 @@ class AdminController extends Controller
             if ($request->hasFile('thumbnail')) {
                 $request->file('thumbnail')->move(public_path().'/images/upload', $thumb);
             }
-            return redirect()->back()->with(['status' => 1, 'message' => 'Update tag', 'label' => 'success']);
+            return redirect()->back()->with(['status' => 1, 'message' => 'Cập nhật thẻ thành công', 'alert' => 'success', 'label' => 'Thành công']);
         }else{
-            return redirect()-back()->with(['status' => 0, 'message' => 'Update tag', 'label' => 'error']);
+            return redirect()-back()->with(['status' => 0, 'message' => 'Cập nhật thẻ không thành công', 'alert' => 'danger', 'label' => 'Lỗi']);
         }
     }
 
     public function tag_pending($value='')
     {
     	$tags = Tag::where('active', 0)->paginate(10);
-        return view('admin.tag.home')->with(['tags' => $tags]);
+        return view('admin.tag.pending')->with(['tags' => $tags]);
     }
 
     public function tag_locked($value='')
     {
     	$tags = Tag::where('active', 2)->paginate(10);
-        return view('admin.tag.home')->with(['tags' => $tags]);
+        return view('admin.tag.locked')->with(['tags' => $tags]);
     }
 
     public function tag_active($id='')
@@ -603,10 +602,9 @@ class AdminController extends Controller
                 $t->active = 0;
             }
             if ($t->save()) {
-                return redirect()->back()->with(['status' => 1, 'message' => 'Change state tag', 'label' => 'success']);
+                return redirect()->back()->with(['status' => 1, 'message' => 'Thay đổi trạng thái thẻ thành công', 'alert' => 'success', 'label' => 'Thành công']);
             }else{
-                return redirect()->back()->with(['status' => 0, 'message' => 'Change state tag', 'label' => 'danger']);
-
+                return redirect()->back()->with(['status' => 0, 'message' => 'Thay đổi trạng thái thẻ không thành công', 'alert' => 'danger', 'label' => 'Lỗi']);
             }
         }else{
             return redirect()->back();
@@ -633,7 +631,7 @@ class AdminController extends Controller
     public function user_pending($value='')
     {
     	$users = User::where('active', 0)->where('auth', 0)->paginate(10);
-        return view('admin.user.home')->with('users', $users);
+        return view('admin.user.pending')->with('users', $users);
     }
 
     public function user_deactive($value='')
@@ -653,9 +651,9 @@ class AdminController extends Controller
             }
 
             if ($u->save()) {
-                return redirect()->back()->with(['status' => 1, 'message' => 'Change state user', 'label' => 'success']);
+                return redirect()->back()->with(['status' => 1, 'message' => 'Thay đổi trạng thái thành viên thành công', 'label' => 'Thành công', 'alert' => 'success']);
             }else{
-                return redirect()->back()->with(['status' => 0, 'message' => 'Change state user', 'label' => 'danger']);
+                return redirect()->back()->with(['status' => 0, 'message' => 'Thay đổi trạng thái thành viên thành công', 'label' => 'Lỗi', 'alert' => 'danger']);
             }
         }else{
             return redirect()->back();
@@ -679,10 +677,74 @@ class AdminController extends Controller
         }else{
             $u->auth = $request->get('auth');
             if ($u->save()) {
-                 return redirect()->back()->with(['status' => 1, 'message' => 'Change authorization user', 'label' => 'success']);
+                 return redirect()->back()->with(['status' => 1, 'message' => 'Phân quyền thành công', 'label' => 'Thành công', 'alert' => 'success']);
             }else{
-                 return redirect()->back()->with(['status' => 0, 'message' => 'Change state user', 'label' => 'danger']);
+                 return redirect()->back()->with(['status' => 0, 'message' => 'Phân quyền không thành công', 'label' => 'Lỗi', 'alert' => 'danger']);
             }
+        }
+    }
+
+    public function user_profile()
+    {
+        $user = auth()->user();
+        return view('admin.user.profile')->with('user', $user);
+    }
+
+    public function user_profile_update(Request $request)
+    {
+        $user = User::find(auth()->user()->id);
+        $user->name = ($request->has('name'))?$request->get('name'):NULL;
+        $user->fullname = ($request->has('fullname'))?$request->get('fullname'):NULL;
+        $user->gender = ($request->has('gender'))?$request->get('gender'):NULL;
+        $user->phone = ($request->has('phone'))?$request->get('phone'):NULL;
+        $user->address = ($request->has('address'))?$request->get('address'):NULL;
+        $user->religion = ($request->has('religion'))?$request->get('religion'):NULL;
+        $user->bio = ($request->has('bio'))?$request->get('bio'):NULL;
+        if ($user->save()) {
+            return redirect()->back()->with(['status'=>1, 'label' => 'Thành công', 'alert' => 'success', 'message' => 'Cập nhật thông tin cá nhân thành công']);
+        }else{
+            return redirect()->back()->with(['status'=>0, 'label' => 'Lỗi', 'alert' => 'danger', 'message' => 'Cập nhật thông tin cá nhân không thành công']);
+        }
+    }
+
+    public function user_change_password()
+    {
+        return view('admin.user.change-password');
+    }
+
+    public function user_change_password_update(Request $request)
+    {
+        $message = array(
+            'old_password.oldpassword' => 'Mật khẩu cũ không đúng. Vui lòng nhập chính xác mật khẩu đã đăng ký trước đó.',
+            'password_confirmation.same' => 'Xác nhận mật khẩu không trùng khớp'
+            );
+        Validator::extend('oldpassword', function ($attribute, $value)
+        {
+            if (Auth::check()) {
+                $pass = auth()->user()->password;
+            }else{
+                $pass ='';
+            }
+            return \Hash::check($value, $pass); 
+        });
+        $this->validate($request, [
+            'old_password' => 'required|oldpassword',
+            'password' => 'required|min:8|max:20',
+            'password_confirmation' => 'required|same:password'
+            ], $message);
+
+        if (Auth::check()) {
+            $o_pass = $request->get('old_password');
+            $n_pass = $request->get('password');
+            $user = User::find(auth()->user()->id);
+            $user->password = bcrypt($n_pass);
+            if ($user->save()) {
+                return redirect()->back()->with(['status' => 1, 'label' => 'Thành công', 'alert' => 'success', 'message' => 'Thay đổi mật khẩu mới thành công. Bây giờ bạn có thể đăng nhập bằng mật khẩu vừa đổi.']);
+            }else{
+                return redirect()->back()->with(['status' => 0, 'label' => 'Lỗi', 'alert' => 'danger',  'message' => 'Thay đổi mật khẩu mới không thành công. Vui lòng kiểm tra chính xác thông tin nhập vào.']);
+            }
+        }else{
+            return redirect()->back();
         }
     }
 

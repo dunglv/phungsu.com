@@ -6,18 +6,29 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <h3 class="" style="font-weight: 900;text-align: center;margin-bottom: 30px">Cập nhật chủ đề</h3>
-    </div>
-    {{-- Show message  --}}
-    @if(session()->has('status')) 
-        <div class="col-md-10 col-md-offset-1">
-            <div class="alert alert-{{session()->get('label')}}">
-                <strong style="text-transform: capitalize;">{{session()->get('label')}}!</strong> {{session()->get('message')}} {{session()->get('label')}} 
+        <h1 class="page-header">
+            Quản lý <small>Cập nhật chủ đề</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-dashboard"></i> Trang chủ
+            </li>
+            <li >
+                Cập nhật chủ đề
+            </li>
+            <li>
+                {{$category->title}}
+            </li>
+        </ol>
+        {{-- Show message  --}}
+       @if(session()->has('status'))
+            <div class="alert alert-{{session()->get('alert')}}">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <strong>{{session()->get('label')}}!</strong> {{session()->get('message')}}
             </div>
-            
-        </div>
-    @endif
-    {{-- end show message --}}
+        @endif
+        {{-- end show message --}}
+    </div>
     {!!Form::open(array( 'route' => ['ad.cate.create_update', $category->id], 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true ))!!}
     <div class="col-md-9">
 

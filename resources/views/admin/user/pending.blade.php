@@ -6,6 +6,27 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
+            <h1 class="page-header">
+                Quản lý <small>Thành viên phòng chờ</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i> Trang chủ
+                </li>
+                <li >
+                    Thành viên phòng chờ
+                </li>
+            </ol>
+            {{-- Show message  --}}
+           @if(session()->has('status'))
+                <div class="alert alert-{{session()->get('alert')}}">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>{{session()->get('label')}}!</strong> {{session()->get('message')}}
+                </div>
+            @endif
+            {{-- end show message --}}
+        </div>
+		<div class="col-md-12">
 			@if(isset($users))
 				@if($users->total() > 0)
 				<table class="table table-striped table-hover">
@@ -42,9 +63,8 @@
 							<td>{{$u->active}}</td>
 							<td>{{$u->auth}}</td>
 							<td>
-								<a href="" class="btn btn-success">Kích hoạt</a>
-								<a href="" class="btn btn-primary">Chỉnh sửa</a>
-								<a href="" class="btn btn-danger">Xóa</a>
+								<a href="{{ route('ad.u.lock', $u->id) }}" class="btn btn-success">Kích hoạt</a>
+								<a href="{{ route('ad.u.delete', $u->id) }}" class="btn btn-danger">Xóa</a>
 							</td>
 						</tr>
 						@endforeach

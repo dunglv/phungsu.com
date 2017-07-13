@@ -6,18 +6,26 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <h3 class="" style="font-weight: 900;text-align: center;margin-bottom: 30px">Tạo chủ đề mới</h3>
-    </div>
-    {{-- Show message  --}}
-    @if(session()->has('status')) 
-        <div class="col-md-10 col-md-offset-1">
-            <div class="alert alert-{{session()->get('label')}}">
-                <strong style="text-transform: capitalize;">{{session()->get('label')}}!</strong> {{session()->get('message')}} {{session()->get('label')}} 
-            </div>
-            
+            <h1 class="page-header">
+                Quản lý <small>Thêm mới chủ đề</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-dashboard"></i> Trang chủ
+                </li>
+                <li class="active">
+                    Thêm mới chủ đề
+                </li>
+            </ol>
+            {{-- Show message  --}}
+           @if(session()->has('status'))
+                <div class="alert alert-{{session()->get('alert')}}">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <strong>{{session()->get('label')}}!</strong> {{session()->get('message')}}
+                </div>
+            @endif
+            {{-- end show message --}}
         </div>
-    @endif
-    {{-- end show message --}}
     {!!Form::open(array( 'route' => 'ad.cate.create_store', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true ))!!}
     <div class="col-md-9">
 
@@ -56,7 +64,7 @@
                 <div class="bl-t">Hoạt động</div>
                 <div class="bl-ct">
                     <div class="radio">
-                        <div class="bl-s-t">Kích hoạt bài viết</div>
+                        <div class="bl-s-t">Kích hoạt</div>
                         <div class="radio-two">
                             <input type="radio" name="active" data-text="on"  value="1"  >
                             <input type="radio" name="active" data-text="off"  value="0" checked="checked">
