@@ -510,7 +510,7 @@ class AdminController extends Controller
     {
     	$message = array();
         $this->validate($request, [
-            'title' => 'required|min:2|max:100',
+            'title' => 'required|min:2|max:100|unique:tags,title',
             'description' => 'min:10|max:200',
             'thumbnail' => 'mimes:jpg,jpeg,png,gif,bmp|between:1,10240'
             //'audio' => 'mimes:mpga,3gp,m4a,wav,wma,amr|between:1,10240',
@@ -535,14 +535,43 @@ class AdminController extends Controller
         }
     }
 
-    public function tag_edit($value='')
+    public function tag_edit($id='')
     {
-    	# code...
+    	$t = Tag::find($id);
+        if ($t->count() > 0) {
+            return view('admin.tag.edit')->with(['tag' => $t]);
+        }else{
+            return redkirect()->back();
+        }
     }
 
-    public function tag_update($value='')
+    public function tag_update($id='', Request $request)
     {
-    	# code...
+    	$message = array();
+        $this->validate($request, [
+            'title' => 'required|min:2|max:100',
+            'description' => 'min:10|max:200',
+            'thumbnail' => 'mimes:jpg,jpeg,png,gif,bmp|between:1,10240'
+            //'audio' => 'mimes:mpga,3gp,m4a,wav,wma,amr|between:1,10240',
+
+            ], $message);
+        $public_audio_url = url('/').'/public/audio/upload/';
+
+        $t = Tag::find($id);
+        $t->title = $request->get('title');
+        $t->slug = $request->get('slug');
+        $t->description = ($request->has('description'))?$request->get('description'):NULL;
+        $t->active = $request->get('active');
+        $thumb = ($request->hasFile('thumbnail'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('thumbnail')->getClientOriginalName())).'.'.$request->file('thumbnail')->getClientOriginalExtension():NULL;
+
+        if ($t->save()) {
+            if ($request->hasFile('thumbnail')) {
+                $request->file('thumbnail')->move(public_path().'/images/upload', $thumb);
+            }
+            return redirect()->back()->with(['status' => 1, 'message' => 'Update tag', 'label' => 'success']);
+        }else{
+            return redirect()-back()->with(['status' => 0, 'message' => 'Update tag', 'label' => 'error']);
+        }
     }
 
     public function tag_pending($value='')
@@ -555,6 +584,26 @@ class AdminController extends Controller
     {
     	$tags = Tag::where('active', 2)->paginate(10);
         return view('admin.tag.home')->with(['tags' => $tags]);
+    }
+
+    public function tag_active($id='')
+    {
+        $t = Tag::find($id);
+        if ($t->count() > 0) {
+            if ($t->active === 0) {
+                $t->active = 1;
+            }elseif($t->active === 1){
+                $t->active = 0;
+            }
+            if ($t->save()) {
+                return redirect()->back()->with(['status' => 1, 'message' => 'Change state tag', 'label' => 'success']);
+            }else{
+                return redirect()->back()->with(['status' => 0, 'message' => 'Change state tag', 'label' => 'danger']);
+
+            }
+        }else{
+            return redirect()->back();
+        }
     }
 
     public function tag_delete()
@@ -580,15 +629,59 @@ class AdminController extends Controller
         return view('admin.user.home')->with('users', $users);
     }
 
-    public function user_locked($value='')
+    public function user_deactive($value='')
     {
     	$users = User::where('active', 2)->where('auth', 0)->paginate(10);
-        return view('admin.user.home')->with('users', $users);
+        return view('admin.user.locked')->with('users', $users);
     }
 
-    public function user_delete($value='')
+    public function user_lock($id='')
     {
-    	# code...
+        $u = User::find($id);
+        if ($u->count() > 0) {
+            if ($u->active === '1' || $u->active === '0') {
+                $u->active = 2;
+            }elseif($u->active === '2'){
+                $u->active = 1;
+            }
+
+            if ($u->save()) {
+                return redirect()->back()->with(['status' => 1, 'message' => 'Change state user', 'label' => 'success']);
+            }else{
+                return redirect()->back()->with(['status' => 0, 'message' => 'Change state user', 'label' => 'danger']);
+            }
+        }else{
+            return redirect()->back();
+        }
+    }
+
+    public function user_auth($id='')
+    {
+        $u = User::find($id);
+        if ($u->count() < 1) {
+            return redirect()->back();
+        }
+        return view('admin.user.auth')->with(['user' => $u]);
+    }
+
+    public function user_auth_update($id='', Request $request)
+    {
+    	$u = User::find($id);
+        if ($u->count() < 1) {
+            return redirect()->back();
+        }else{
+            $u->auth = $request->get('auth');
+            if ($u->save()) {
+                 return redirect()->back()->with(['status' => 1, 'message' => 'Change authorization user', 'label' => 'success']);
+            }else{
+                 return redirect()->back()->with(['status' => 0, 'message' => 'Change state user', 'label' => 'danger']);
+            }
+        }
+    }
+
+    public function user_delete($id='', Request $request)
+    {
+        # code...
     }
 
     public function user_destroy($value='')

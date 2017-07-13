@@ -45,6 +45,23 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
 
 	Route::get('/user/deactive', ['as' => 'ad.u.deactive', 'uses' => 'AdminController@user_deactive']);
 
-	Route::get('/user/locked', ['as' => 'ad.u.locked', 'uses' => 'AdminController@user_locked']);
-	
+	Route::get('user/{id}/lock', [
+		'as' => 'ad.u.lock',
+		'uses' => 'AdminController@user_lock'
+		]);
+
+	Route::get('user/{id}/auth', [
+		'as' => 'ad.u.auth',
+		'uses' => 'AdminController@user_auth'
+		]);
+
+	Route::post('user/{id}/auth', [
+		'as' => 'ad.u.auth_update',
+		'uses' => 'AdminController@user_auth_update'
+		]);
+
+	Route::get('user/{id}/delete', [
+		'as' => 'ad.u.delete',
+		'uses' => 'AdminController@user_delete'
+		]);
 });

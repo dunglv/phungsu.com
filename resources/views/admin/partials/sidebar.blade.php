@@ -187,10 +187,7 @@
                         <a href="{{ route('ad.u.index') }}">Tất cả thành viên</a>
                     </li>
                     <li>
-                        <a href="{{ route('ad.u.deactive') }}">Thành viên đã xóa</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('ad.u.locked') }}">Thành viên khóa tạm thời</a>
+                        <a href="{{ route('ad.u.deactive') }}">Thành viên đã khóa</a>
                     </li>
                 </ul>
             </li>

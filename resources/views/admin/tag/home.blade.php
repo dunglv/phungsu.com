@@ -30,8 +30,8 @@
 							<td><a href="#">{{$t->articles->count()}}</a></td>
 							<td>{{$t->active}}</td>
 							<td>
-								<a href="" class="btn btn-success">Kích hoạt</a>
-								<a href="" class="btn btn-primary">Chỉnh sửa</a>
+								<a href="{{ route('ad.tag.active', $t->id) }}" class="btn btn-default"><i class="fa fa-eye-slash"></i> Ẩn</a>
+								<a href="{{ route('ad.tag.edit', $t->id) }}" class="btn btn-primary">Chỉnh sửa</a>
 								<a href="" class="btn btn-danger">Xóa</a>
 							</td>
 						</tr>
