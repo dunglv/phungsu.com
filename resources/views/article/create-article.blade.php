@@ -246,11 +246,12 @@
         //         }
         //     }
         // });
+        // console.log(dt);
         $('.tag-in').autocomplete({
            
             source: dt,
             search: function(e, ui){
-                
+                console.log(dt);
             },
             
             response: function(e, ui){

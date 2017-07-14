@@ -138,7 +138,7 @@
                     @if(isset($latest_a) && $latest_a->count() > 0)
                         @foreach($latest_a as $a)
                         <a href="{{ route('ui.article.detail', $a->slug) }}" class="list-group-item">
-                            <span class="badge">{{$a->created_at->format('d-m-Y')}}</span>
+                            <span class="badge" title="{{$a->created_at->format('Y-m-d H:i:s')}}">{{ \Helper::datetime_recent($a->created_at->format('Y-m-d H:i:s')) }} trước</span>
                             <i class="fa fa-fw fa-bitcoin"></i> {{$a->title}}
                         </a>
                         @endforeach
@@ -162,7 +162,7 @@
                      @if(isset($latest_c) && $latest_c->count() > 0)
                         @foreach($latest_c as $c)
                         <a href="#" class="list-group-item">
-                            <span class="badge">{{$c->created_at->format('d-m-Y')}}</span>
+                            <span class="badge" title="{{$c->created_at->format('Y-m-d H:i:s')}}">{{ \Helper::datetime_recent($c->created_at->format('Y-m-d H:i:s')) }} trước</span>
                             <i class="fa fa-fw fa-comment-o"></i> {{$c->comment}}
                         </a>
                         @endforeach
@@ -186,7 +186,7 @@
                      @if(isset($latest_u) && $latest_u->count() > 0)
                         @foreach($latest_u as $u)
                         <a href="#" class="list-group-item">
-                            <span class="badge">{{$u->created_at->format('d-m-Y')}}</span>
+                            <span class="badge" title="{{$u->created_at->format('Y-m-d H:i:s')}}">{{ \Helper::datetime_recent($u->created_at->format('Y-m-d H:i:s')) }} trước</span>
                             <i class="fa fa-fw fa-user"></i> {{$u->name}}
                         </a>
                         @endforeach
@@ -200,94 +200,97 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Order #</th>
-                                    <th>Order Date</th>
-                                    <th>Order Time</th>
-                                    <th>Amount (USD)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>3326</td>
-                                    <td>10/21/2013</td>
-                                    <td>3:29 PM</td>
-                                    <td>$321.33</td>
-                                </tr>
-                                <tr>
-                                    <td>3325</td>
-                                    <td>10/21/2013</td>
-                                    <td>3:20 PM</td>
-                                    <td>$234.34</td>
-                                </tr>
-                                <tr>
-                                    <td>3324</td>
-                                    <td>10/21/2013</td>
-                                    <td>3:03 PM</td>
-                                    <td>$724.17</td>
-                                </tr>
-                                <tr>
-                                    <td>3323</td>
-                                    <td>10/21/2013</td>
-                                    <td>3:00 PM</td>
-                                    <td>$23.71</td>
-                                </tr>
-                                <tr>
-                                    <td>3322</td>
-                                    <td>10/21/2013</td>
-                                    <td>2:49 PM</td>
-                                    <td>$8345.23</td>
-                                </tr>
-                                <tr>
-                                    <td>3321</td>
-                                    <td>10/21/2013</td>
-                                    <td>2:23 PM</td>
-                                    <td>$245.12</td>
-                                </tr>
-                                <tr>
-                                    <td>3320</td>
-                                    <td>10/21/2013</td>
-                                    <td>2:15 PM</td>
-                                    <td>$5663.54</td>
-                                </tr>
-                                <tr>
-                                    <td>3319</td>
-                                    <td>10/21/2013</td>
-                                    <td>2:13 PM</td>
-                                    <td>$943.45</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="text-right">
-                        <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-         <div class="col-lg-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Donut Chart</h3>
-                </div>
-                <div class="panel-body">
-                    <div id="morris-donut-chart"></div>
-                    <div class="text-right">
-                        <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </div>
+    <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Transactions Panel</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Order Date</th>
+                                        <th>Order Time</th>
+                                        <th>Amount (USD)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>3326</td>
+                                        <td>10/21/2013</td>
+                                        <td>3:29 PM</td>
+                                        <td>$321.33</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3325</td>
+                                        <td>10/21/2013</td>
+                                        <td>3:20 PM</td>
+                                        <td>$234.34</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3324</td>
+                                        <td>10/21/2013</td>
+                                        <td>3:03 PM</td>
+                                        <td>$724.17</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3323</td>
+                                        <td>10/21/2013</td>
+                                        <td>3:00 PM</td>
+                                        <td>$23.71</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3322</td>
+                                        <td>10/21/2013</td>
+                                        <td>2:49 PM</td>
+                                        <td>$8345.23</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3321</td>
+                                        <td>10/21/2013</td>
+                                        <td>2:23 PM</td>
+                                        <td>$245.12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3320</td>
+                                        <td>10/21/2013</td>
+                                        <td>2:15 PM</td>
+                                        <td>$5663.54</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3319</td>
+                                        <td>10/21/2013</td>
+                                        <td>2:13 PM</td>
+                                        <td>$943.45</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-right">
+                            <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i> Donut Chart</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="morris-donut-chart"></div>
+                        <div class="text-right">
+                            <a href="#">View Details <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     <!-- /.row -->
 </div>
 @stop

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\ActiveUser;
 use App\Mail\UserMail;
@@ -58,6 +60,11 @@ class RegisterController extends Controller
         ]);
     }
 
+    protected function redirectTo()
+    {
+        return route('ui.user.finish-register');
+    }
+
     /**
      * Create a new user instance after a valid registration.
      *
@@ -76,14 +83,23 @@ class RegisterController extends Controller
             'key' => $key
             ]));
         Mail::to($data['email'])->send(new UserMail($key, $data['email']));
-        if ($user) {
-            return redirect()->route('ui.user.finish-register');
-        }
+
+        return $user;
 
         // return User::create([
         //     'name' => $data['name'],
         //     'email' => $data['email'],
         //     'password' => bcrypt($data['password']),
         // ]);
+    }
+
+    protected function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        return $this->registered($request, $user)
+            ?: redirect($this->redirectPath());
     }
 }

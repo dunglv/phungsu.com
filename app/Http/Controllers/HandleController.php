@@ -1,12 +1,13 @@
 <?php
+
+namespace App\Http\Controllers;
 /*
 |--------------------------------------------------------------------------------------
 | INSTRUCTIONS TO BETTER WORK WITH This Controller
 |--------------------------------------------------------------------------------------
 | * Search secsion: +section (+article,+tag,+user,+category,...)
 */
-namespace App\Http\Controllers;
-
+use App\Http\Requests\ArticleRequest;
 use Illuminate\Http\Request;
 use Auth;
 use App\Category;
@@ -27,12 +28,7 @@ class HandleController extends Controller
     	return view('partials.home')->with(['articles' => $articles, 'categories' => $categories]);
     }
 
-    public function home_create()
-    {
-        $articles = Article::inRandomOrder()->where('active', 1)->get();
-    	return view('article.create-home')->with(['articles' => $articles]);
-    }
-
+    
     /**************************************************************************************
      * ARTICLE (+article) Create new article with format normal
      **************************************************************************************
@@ -40,14 +36,32 @@ class HandleController extends Controller
      * Store article
      * FORMAT : 0
      **/
-    
-    public function article_create()
+    public function article_create_home()
+    {
+        $articles = Article::inRandomOrder()->where('active', 1)->get();
+        return view('article.create-home')->with(['articles' => $articles]);
+    }
+
+
+    /**
+     * Ger view form create article normal
+     *
+     * @return void
+     * @author 
+     **/
+    public function article_create_normal()
     {
         $cates = Category::all()->where('active', 1);
     	return view('article.create-article')->with('cates', $cates);
     }
 
-    public function article_create_store(Request $request)
+    /**
+     * Save article normal
+     *
+     * @return void
+     * @author 
+     **/
+    public function article_create_normal_store(ArticleRequest $request)
     {
         // dd(auth()->user()->id);
         $title = $request->get('title');
@@ -60,43 +74,7 @@ class HandleController extends Controller
         $opencmt = $request->get('opencomment');
         $openedit = $request->get('openedit');
         $notify = $request->get('notify');
-        Validator::extend('choose', function($attribute, $value, $parameters, $validator){
-            return $value > 0;
-        });
-        Validator::extend('mintag', function($attribute, $value, $parameters, $validator){
-            $t = explode(',', $value);
-            if (count($t) < 1) {
-                return false;
-            }
-            return true;
-        });
-        $message = array(
-            'title.min' => 'Tiêu đề bài viết quá ngắn. Tối thiểu :min ký tự',
-            'title.max' => 'Tiêu đề bài viết quá dài. Tối đa :max ký tự',
-            'title.unique' => 'Dường như bài viết đã có trên website. Sử dụng chứ năng tìm kiếm để tra hoặc yêu cầu quyền chỉnh sửa bài viết từ tác giả.',
-            'slug.min' => 'Tiêu đề bài viết quá ngắn. Tối thiểu :min ký tự',
-            'slug.max' => 'Tiêu đề bài viết quá dài. Tối đa :max ký tự',
-            'slug.unique' => 'Dường như bài viết đã có trên website. Sử dụng chứ năng tìm kiếm để tra hoặc yêu cầu quyền chỉnh sửa bài viết từ tác giả.',
-            'description.min' => 'Mô tả quá ngắn để có cái nhìn tổng quát về bài viết.',
-            'description.max' => 'Mô tả quá dài. Vui lòng thể hiện vào phần nội dung',
-            'category.choose' => 'Hãy chọn một chủ đề cụ thể cho bài viết.',
-            'content.min' => 'Nội dung quá ngắn. Hãy thể hiện lòng chân thành khi viết bài.',
-            'thumbnail.mimes' => 'Định dạng ảnh chưa đúng. (.JPG, .PNG, .GIF, .BMP, .JPEG)',
-            'thumbnail.between' => 'Kích thướt ảnh quá nhỏ hoặc quá lớn (tối đa: 2:max)',
-            'tags.mintag' => 'Nhập ít nhất một thẻ cho bài viết'
-            );
-        $validate = $this->validate($request, [
-            'title' => 'required|min:10|max:200|unique:articles,title',
-            'slug' => 'required|min:10|max:200|unique:articles,slug',
-            'description' => 'min:10|max:500',
-            'content' => 'min:100',
-            'category' => 'choose',
-            'thumbnail' => 'mimes:jpg,png,gif,bmp,jpeg|between:1,2048',
-            'tags' => 'required|mintag'
-            ], $message);
-        // if ($validate->fails()) {
-        //     return redirect()->back()->withErrors($validate)->withInput();
-        // }
+        
         $public_image_url = url('/').'/public/images/upload/article/';
         $a = new Article;
         $a->title = $title;
@@ -130,21 +108,27 @@ class HandleController extends Controller
     }
 
 
-    /**************************************************************
-     * Create new article with format mp3
+    /**
+     * Create new article with format audio
      *
      * Passing category to view create article
      * Store article
      * FORMAT : 1
      **/
-    
-    public function article_upload_mp3()
+    public function article_create_mp3()
     {
     	$cates = Category::all()->where('active', 1);
         return view('article.upload-mp3')->with('cates', $cates);
     }
 
-    public function article_upload_mp3_store(Request $request)
+
+    /**
+     * Save new article audio
+     *
+     * @return void
+     * @author 
+     **/
+    public function article_create_mp3_store(ArticleRequest $request)
     {
         $title = $request->get('title');
         $slug = $request->get('slug');
@@ -158,46 +142,7 @@ class HandleController extends Controller
         $opencmt = $request->get('opencomment');
         $openedit = $request->get('openedit');
         $notify = $request->get('notify');
-        Validator::extend('choose', function($attribute, $value, $parameters, $validator){
-            return $value > 0;
-        });
-        Validator::extend('mintag', function($attribute, $value, $parameters, $validator){
-            $t = explode(',', $value);
-            if (count($t) < 1) {
-                return false;
-            }
-            return true;
-        });
-        $message = array(
-            'title.min' => 'Tiêu đề bài viết quá ngắn. Tối thiểu :min ký tự',
-            'title.max' => 'Tiêu đề bài viết quá dài. Tối đa :max ký tự',
-            'title.unique' => 'Dường như bài viết đã có trên website. Sử dụng chứ năng tìm kiếm để tra hoặc yêu cầu quyền chỉnh sửa bài viết từ tác giả.',
-            'slug.min' => 'Tiêu đề bài viết quá ngắn. Tối thiểu :min ký tự',
-            'slug.max' => 'Tiêu đề bài viết quá dài. Tối đa :max ký tự',
-            'slug.unique' => 'Dường như bài viết đã có trên website. Sử dụng chứ năng tìm kiếm để tra hoặc yêu cầu quyền chỉnh sửa bài viết từ tác giả.',
-            'description.min' => 'Mô tả quá ngắn để có cái nhìn tổng quát về bài viết.',
-            'description.max' => 'Mô tả quá dài. Vui lòng thể hiện vào phần nội dung',
-            'category.choose' => 'Hãy chọn một chủ đề cụ thể cho bài viết.',
-            'content.min' => 'Nội dung quá ngắn. Hãy thể hiện lòng chân thành khi viết bài.',
-            'audio.required' => 'Chọn một tệp tin âm thanh mp3 để upload.',
-            'audio.mimes' => 'Định dạng tệp âm thanh chưa đúng. (.mp3, .wma, .amr)',
-            'audio.between' => 'Kích thướt ảnh quá nhỏ hoặc quá lớn (tối đa: 2:max)',
-            'tags.mintag' => 'Nhập ít nhất một thẻ cho bài viết'
-            );
-        $validate = $this->validate($request, [
-            'title' => 'required|min:2|max:200|unique:articles,title',
-            'slug' => 'required|min:2|max:200|unique:articles,slug',
-            'description' => 'min:10|max:500',
-            'content' => 'min:100',
-            'category' => 'choose',
-            'audio' => 'required|mimes:mpga|between:1,10240', 
-            //'audio' => 'mimes:mpga,3gp,m4a,wav,wma,amr|between:1,10240',
-
-            'tags' => 'required|mintag'
-            ], $message);
-        // if ($validate->fails()) {
-        //     return redirect()->back()->withErrors($validate)->withInput();
-        // }
+        
         $public_audio_url = url('/').'/public/audio/upload/';
         $a = new Article;
         $a->title = $title;
@@ -229,7 +174,14 @@ class HandleController extends Controller
         }
     }
 
-    public function article_detail($slug="", Request $request)
+
+    /**
+     * Detail article normal (Slug)
+     *
+     * @return void
+     * @author 
+     **/
+    public function article_detail($slug="")
     {
         $article = Article::where('slug', $slug)->where('active', 1)->get();
         if (count($article) > 0) {
@@ -245,7 +197,15 @@ class HandleController extends Controller
             return redirect()->route('ui.home');
         }
     }
-    public function article_detail_mp3($slug="", Request $request)
+
+
+    /**
+     * Detail article with format mp3
+     *
+     * @return void
+     * @author 
+     **/
+    public function article_detail_mp3($slug="")
     {
         $article = Article::where('slug', $slug)->where('active', 1)->get();
         $comments = Comment::whereHas('article', function($q) use ($slug){
@@ -259,6 +219,13 @@ class HandleController extends Controller
         }
     }
 
+
+    /**
+     * Detail article with format video, receive paramaters is Slug
+     *
+     * @return void
+     * @author 
+     **/
     public function article_detail_video($slug="", Request $request)
     {
         $article = Article::where('slug', $slug)->where('active', 1)->get();
@@ -294,6 +261,9 @@ class HandleController extends Controller
             return false;
         }
     }
+
+
+    
     /**************************************************************************************
      * TAG (+tag)
      **************************************************************************************

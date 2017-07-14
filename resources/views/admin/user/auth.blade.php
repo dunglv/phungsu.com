@@ -3,14 +3,14 @@
     <div class="row">
         <div class="col-md-12">
             <h1 class="page-header">
-                    Quản lý <small>Thành viên đã khóa</small>
+                    Quản lý <small>Thay đổi quyền thành viên</small>
                 </h1>
             <ol class="breadcrumb">
                 <li class="active">
                     <i class="fa fa-dashboard"></i> Trang chủ
                 </li>
                 <li>
-                    Thành viên đã khóa
+                    Quyền thành viên
                 </li>
             </ol>
             {{-- Show message --}} @if(session()->has('status'))
@@ -26,8 +26,8 @@
                 <label for="inputEmail3" class="col-sm-2 control-label">Quyền</label>
                 <div class="col-sm-10">
                     <select name="auth" class="form-control" required="required">
-                        <option @if ($user->auth === '0') selected="selected" @endif value="0">Người dùng thông thường</option>
-                        <option @if ($user->auth === '1') selected="selected" @endif value="1">Quản lý</option>
+                        <option @if ($user->auth === '0') selected="selected" @endif value="0">Thành viên thường</option>
+                        <option @if ($user->auth === '1') selected="selected" @endif value="1">Quản lý trang web</option>
                     </select>
                     @if($errors->count() > 0)<span class="error">{{$errors->first('auth')}}</span>@endif
                 </div>

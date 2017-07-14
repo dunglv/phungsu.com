@@ -56,5 +56,25 @@ class LoginController extends Controller
     //         return redirect()->back();
     //     }
     // }
+    
+    // public function username()
+    // {
+    //     return 'name';
+    // }
+
+    protected function credentials(Request $request)
+    {
+        $credential = $request->only($this->username(), 'password');
+        // Add active whe login
+        $credential['active'] = 1;
+        return $credential;
+    }
+
+    // protected function attemptLogin(Request $request)
+    // {
+    //     return $this->guard()->attempt(
+    //         $this->credentials($request), $request->has('remember')
+    //     );
+    // }
 
 }

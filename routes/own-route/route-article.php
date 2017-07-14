@@ -3,33 +3,44 @@
 Route::group(['middleware' => 'auth'], function() {
     Route::get('/create-new',[
         'as' => 'ui.create',
-        'uses' => 'HandleController@home_create'
+        'uses' => 'HandleController@article_create_home'
+        ]);
+    Route::get('/article/create-article', [
+        'as' => 'ui.article.create-article',
+        'uses' => 'HandleController@article_create_normal'
+        ]);
+    Route::post('/article/create-article', [
+        'as' => 'ui.article.create-article-store',
+        'uses' => 'HandleController@article_create_normal_store'
         ]);
 
     Route::get('/article/upload-mp3', [
         'as' => 'ui.article.upload-mp3',
-        'uses' => 'HandleController@article_upload_mp3'
+        'uses' => 'HandleController@article_create_mp3'
         ]);
     Route::post('/article/upload-mp3', [
         'as' => 'ui.article.upload-mp3-store',
-        'uses' => 'HandleController@article_upload_mp3_store'
+        'uses' => 'HandleController@article_create_mp3_store'
         ]);
+    
     Route::get('/article/upload-video', [
         'as' => 'ui.article.upload-video',
-        'uses' => 'HandleController@article_create'
+        'uses' => 'HandleController@article_create_video'
         ]);
+    Route::post('/article/upload-video', [
+        'as' => 'ui.article.upload-video-store',
+        'uses' => 'HandleController@article_create_video_store'
+        ]);
+
     Route::get('/article/upload-image', [
         'as' => 'ui.article.upload-image',
-        'uses' => 'HandleController@article_create'
+        'uses' => 'HandleController@article_create_image'
         ]);
-    Route::get('/article/create-article', [
-        'as' => 'ui.article.create-article',
-        'uses' => 'HandleController@article_create'
+    Route::post('/article/upload-image', [
+        'as' => 'ui.article.upload-image-store',
+        'uses' => 'HandleController@article_create_image_store'
         ]);
-    Route::post('/article/create-article', [
-        'as' => 'ui.article.create-article-store',
-        'uses' => 'HandleController@article_create_store'
-        ]);
+
     Route::get('/article/handle-req', [
         'as' => 'ui.article.handle-req',
         'uses' => 'HandleController@handle_req_article'

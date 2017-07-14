@@ -8,11 +8,13 @@ use App\Category;
 use App\Article;
 use App\Tag;
 use App\Stat;
+use App\ActiveUser;
 use App\Comment;
 use App\User;
 use Validator;
 use Mail;
 use App\Mail\UserMail;
+use App\Helpers\Helper;
 class AdminController extends Controller
 {
     public function __construct()
@@ -761,6 +763,7 @@ class AdminController extends Controller
 
     public function finish_register()
     {
+        // dd(Helper::datetime_recent());
         return view('mail.register-finish');
     }
 
@@ -772,12 +775,19 @@ class AdminController extends Controller
             $user = User::whereHas('active_users', function($q) use($key){
                 $q->where('key', $key);
             })->where('email', $email)->get();
-
+            // dd($user[0]);
             if ($user->count() > 0) {
                 $user[0]->active = 1;
+                $active = ActiveUser::where('user_id', $user[0]->id)->get();
+                dd($active[0]);
+                $active[0]->active = 1;
                 // $user[0]->active_users()->active = 1;
-                $user[0]->active_users(['active'=>1])->save();
-                $user[0]->save();
+                
+                if($user[0]->save() && $active[0]->save()){
+                    return redirect()->route('ui.home');
+                }else{
+                    return redirect()->route('ui.user.finish-register');
+                }
             }
         }
     }
@@ -786,4 +796,10 @@ class AdminController extends Controller
         return view('mail.active-user');
     }
 
+
+    // +setting
+    public function setting_home()
+    {
+        return view('admin.setting.home');
+    }
 }

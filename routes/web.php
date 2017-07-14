@@ -56,20 +56,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
     Route::get('/', ['as' => 'ad.home', 'uses' => 'AdminController@home']);
 });
 
-if (file_exists(__DIR__.'/own-route/route-article.php')) {
-	require __DIR__.'/own-route/route-article.php';
-}
-
-if (file_exists(__DIR__.'/own-route/route-category.php')) {
-	require __DIR__.'/own-route/route-category.php';
-}
-
-if (file_exists(__DIR__.'/own-route/route-tag.php')) {
-	require __DIR__.'/own-route/route-tag.php';
-}
-
-if (file_exists(__DIR__.'/own-route/route-user.php')) {
-	require __DIR__.'/own-route/route-user.php';
+foreach (File::allFiles(__DIR__.'/own-route') as $file) {
+	if (file_exists($file->getPathName())) {
+		require $file->getPathName();
+	}
 }
 
 Auth::routes();

@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Carbon\Carbon;
+
 /**
 * 
 */
@@ -22,5 +24,14 @@ class Helper
 		}
 
 		return '_PS_'.$str;
+	}
+
+	public static function datetime_recent($datetime = '2017-7-14 23:26:11')
+	{
+		Carbon::setLocale('vi');
+		$now = Carbon::now('Asia/Ho_Chi_Minh');
+		$dt = Carbon::parse($datetime);
+		$diff = $now->diffForHumans($dt, true);
+		return $diff;
 	}
 }

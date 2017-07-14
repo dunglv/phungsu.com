@@ -192,31 +192,14 @@
                 </ul>
             </li>
             <li>
-                <a href="#"><i class="fa fa-cog"></i> Cài đặt</a>
-            </li>
-            <li>
-                <a href="javascript:;" data-toggle="collapse" data-target="#demo5"><i class="fa fa-user-md"></i> Phân quyền thành viên<i class="fa fa-fw fa-caret-down"></i></a>
-                <ul id="demo5" class="collapse">
-                    <li>
-                        <a href="#">Thành viên phòng chờ</a>
-                    </li>
-                    <li>
-                        <a href="#">Tất cả thành viên</a>
-                    </li>
-                    <li>
-                        <a href="#">Thành viên đã xóa</a>
-                    </li>
-                    <li>
-                        <a href="#">Thành viên khóa tạm thời</a>
-                    </li>
-                </ul>
+                <a href="{{ route('ad.set.home') }}"><i class="fa fa-cog"></i> Cài đặt</a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-feed"></i> Phản hồi trang web</a>
             </li>
             <li>
-                <a href="javascript:;" data-toggle="collapse" data-target="#demo6"><i class="fa fa-folder"></i> Dữ liệu website<i class="fa fa-fw fa-caret-down"></i></a>
-                <ul id="demo6" class="collapse">
+                <a href="javascript:;" data-toggle="collapse" data-target="#demo6" @if($curSeg==="export") aria-expanded="true" @endif><i class="fa fa-folder"></i> Dữ liệu website<i class="fa fa-fw fa-caret-down"></i></a>
+                <ul id="demo6" class="collapse @if($curSeg==="export") in @endif" @if($curSeg==="export") aria-expanded="true" @endif>
                     <li>
                         <a href="#">Xuất danh sách các bài viết</a>
                     </li>
