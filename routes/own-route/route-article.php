@@ -46,6 +46,15 @@ Route::group(['middleware' => 'auth'], function() {
         'uses' => 'HandleController@handle_req_article'
         ]);
 
+    Route::get('/article/edit-normal/{slug}', [
+        'as' => 'ui.article.edit-normal',
+        'uses' => 'HandleController@article_edit_normal'
+        ]);
+
+    Route::post('/article/edit-normal/{slug}', [
+        'as' => 'ui.article.edit-normal-update',
+        'uses' => 'HandleController@article_edit_normal_update'
+        ]);
 });
 
 /**

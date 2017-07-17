@@ -21,6 +21,7 @@
                                 @else
                                     <img src="{{$a->thumbnail}}" alt="{{$a->title}}">
                                 @endif
+                                <div class="h-time">{{Helper::datetime_recent($a->created_at->format('Y-m-d H:i:s'))}} trước</div>
                             </div>
                             <div class="h-i-item">
                                 @if($a->format === 0)

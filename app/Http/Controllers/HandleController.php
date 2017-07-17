@@ -8,6 +8,7 @@ namespace App\Http\Controllers;
 | * Search secsion: +section (+article,+tag,+user,+category,...)
 */
 use App\Http\Requests\ArticleRequest;
+use App\Http\Requests\ArticleUpdateRequest;
 use Illuminate\Http\Request;
 use Auth;
 use App\Category;
@@ -103,6 +104,84 @@ class HandleController extends Controller
             return redirect()->route('ui.article.create-article')->with('flash_success', 'Add new article successful.');
         }else{
             return redirect()->back()->with('flash_error', 'Create new article is failed');
+        }
+
+    }
+
+    /**
+     * Ger view form edit article normal
+     *
+     * @return void
+     * @author 
+     **/
+    public function article_edit_normal($slug='')
+    {
+        $article = Article::where('slug', $slug)->where('active', 1)->get();
+        if ($article->count() > 0) {
+            $cates = Category::all()->where('active', 1);
+            return view('article.edit-normal')->with(['article' => $article[0], 'cates' => $cates]);
+        }else{
+            return redirect()->back();
+        }
+        
+    }
+
+    /**
+     * Save article normal
+     *
+     * @return void
+     * @author 
+     **/
+    public function article_edit_normal_update($slug, ArticleUpdateRequest $request)
+    {
+        $title = $request->get('title');
+        $slugd = $request->get('slug');
+        $desc = $request->get('description');
+        $content = $request->get('content');
+        $thumb = $request->file('thumbnail');
+        $cate = $request->get('category');
+        $tag = $request->get('tags');
+        $opencmt = $request->get('opencomment');
+        $openedit = $request->get('openedit');
+        $notify = $request->get('notify');
+        
+        $public_image_url = url('/').'/public/images/upload/article/';
+        $ar = Article::where('slug', $slug)->where('active', 1)->where('user_id', auth()->user()->id)->get();
+        if ($ar->count() < 1) {
+            return redirect()->back();
+        }
+        $a = $ar[0];
+        $a->title = $title;
+        $a->slug = $slugd;
+        $a->description = $desc;
+        $a->format = 0;
+        $a->content = $content;
+        $a->user_id = auth()->user()->id;
+        // dd($request->hasFile('thumbnail'));
+        $thumb = ($request->hasFile('thumbnail'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('thumbnail')->getClientOriginalName())).'.'.$request->file('thumbnail')->getClientOriginalExtension():NULL;
+        if ($request->hasFile('thumbnail') || !is_null($request->get('thumbnail'))) {
+            $a->thumbnail = $public_image_url.$thumb;
+        }else{
+            $a->thumbnail = $request->get('old_thumbnail');
+        }
+        $a->opencomment = $request->get('opencomment');
+        $a->openedit = $request->get('openedit');
+        $a->notify = $request->get('notify');
+        // $a->active = $request->get('active');
+        if($a->save()){
+            // Handle tag and store pivot
+            $tgs = explode(',', $tag);
+            for ($i=0; $i < count($tgs); $i++) { 
+                $a->tags()->sync([$tgs[$i]]);
+            }
+            if ($request->hasFile('thumbnail')) {
+                $request->file('thumbnail')->move(public_path().'/images/upload/article', $thumb);
+            }
+            $a->category()->sync([$cate]);
+            $a->stat()->save(new Stat(['article_id' => $a->id]));
+            return redirect()->route('ui.article.edit-normal', $a->slug)->with(['status' => 'success', 'message' => 'Cập nhật bài viết thành công', 'label' => 'Thành công']);
+        }else{
+            return redirect()->back()->with(['status' => 'danger', 'message' => 'Cập nhật bài viết không thành công', 'label' => 'Lỗi']);
         }
 
     }

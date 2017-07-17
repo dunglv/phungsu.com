@@ -12,7 +12,7 @@
         <div class="bl-dt">
             <h1 class="dt-tit">Bài viết: {{$article[0]->title}}</h1>
             <div class="dt-sta">
-                <span>Trong: @foreach($article[0]->category as $c)<a href="{{ route('ui.category.detail', $c->slug) }}">{{$c->title}}</a>@endforeach</span> <span><i class="fa fa-eye"></i> {{$article[0]->stat->view}}</span> <span><i class="fa fa-heart"></i> {{$article[0]->stat->like}}</span>
+                <span>Đã tạo <strong title="{{$article[0]->created_at->format('Y-m-d H:i:s')}}">{{Helper::datetime_recent($article[0]->created_at->format('Y-m-d H:i:s'))}} trước</strong> trong: @foreach($article[0]->category as $c)<a href="{{ route('ui.category.detail', $c->slug) }}">{{$c->title}}</a>@endforeach</span> <span><i class="fa fa-eye"></i> {{$article[0]->stat->view}}</span> <span><i class="fa fa-heart"></i> {{$article[0]->stat->like}}</span>
             </div>
             @if(!empty($article[0]->description))
             <div class="dt-desc">
@@ -27,18 +27,28 @@
                 {!!$article[0]->content!!}
             </div>
             <div class="dt-ac">
-                Do you like this article?
-                <ul>
-                    <li class="like">
-                        <a href="#"><i class="fa fa-heart"></i></a>
-                    </li>
-                    <li class="fb">
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{route('ui.article.detail', $article[0]->slug)}}" target="_blank"><i class="fa fa-facebook"></i></a>
-                    </li>
-                    <li class="gg">
-                        <a href="https://plus.google.com/share?url={{route('ui.article.detail', $article[0]->slug)}}" target="_blank"><i class="fa fa-google-plus"></i></a>
-                    </li>
-                </ul>
+                {{-- action user --}}
+                @if($article[0]->user_id === auth()->user()->id)
+                <div class="dt-ac-le">
+                    <a href="{{ route('ui.article.edit-normal', $article[0]->slug) }}">Chỉnh sửa</a>
+                    <a id="click_remove_{{$article[0]->id}}" href="#" onclick="javascript:void(0);" class="clickRemoveThis click-{{$article[0]->id}}">Xóa bài viết này</a>
+                </div>
+                @endif
+                {{-- end action user --}}
+                <div class="dt-ac-ri">
+                    Hãy nhấn nút thích và chia sẻ đến tất cả mọi người nhé!
+                    <ul>
+                        <li class="like">
+                            <a href="#"><i class="fa fa-heart"></i></a>
+                        </li>
+                        <li class="fb">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{route('ui.article.detail', $article[0]->slug)}}" target="_blank"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li class="gg">
+                            <a href="https://plus.google.com/share?url={{route('ui.article.detail', $article[0]->slug)}}" target="_blank"><i class="fa fa-google-plus"></i></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="dt-tag">@foreach($article[0]->tags as $t)<a href="{{ route('ui.tag.detail', $t->slug) }}">{{$t->title}}</a>@endforeach</div>
             {{-- About author --}}
@@ -58,7 +68,7 @@
                             @if(!empty($article[0]->user->fullname))
                                 <p>{{$article[0]->user->fullname}}</p>
                             @else
-                                <p>Tham gia: {{$article[0]->user->created_at->format('d-m-Y')}}</p>
+                                <p>Tham gia: {{Helper::datetime_current($article[0]->user->created_at->format('Y-m-d H:i:s'))}}</p>
                             @endif
                         </div>
                     </div>
@@ -72,9 +82,9 @@
                 </div>
                 <div class="flr">
                     <ul>
-                        <li><i class="fa fa-calendar"></i> Join: {{$article[0]->created_at->format('d-m-Y')}}</li>
+                        <li><i class="fa fa-calendar"></i> Join: {{Helper::datetime_recent($article[0]->user->created_at->format('Y-m-d H:i:s'))}} trước</li>
                         <li><i class="fa fa-pencil-square-o"></i> Post: {{$article[0]->user->count()}}</li>
-                        <li><i class="fa fa-thumbs-o-up"></i> Like: {{$article[0]->stat->like}}</li>
+                        <li><i class="fa fa-thumbs-o-up"></i> Thích: {{$article[0]->stat->like}}</li>
                     </ul>
                 </div>
             </div>
@@ -114,7 +124,7 @@
                                         </div>
                                         <div class="flr">
                                             <p><a href="#">{{$cmt->user[0]->name}}</a></p>
-                                            <p>{{$cmt->created_at->format('d-m-Y H:i:s')}}</p>
+                                            <p title="{{$cmt->created_at->format('d-m-Y H:i:s')}}">{{Helper::datetime_recent($cmt->created_at->format('d-m-Y H:i:s'))}} trước</p>
                                         </div>
                                         @if(auth()->check() && $cmt->user[0]->id === auth()->user()->id)
                                         <div class="cmt-opt">
