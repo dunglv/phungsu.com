@@ -28,7 +28,8 @@
             </div>
             <div class="dt-ac">
                 {{-- action user --}}
-                @if($article[0]->user_id === auth()->user()->id)
+
+                @if(auth()->check() && $article[0]->user_id === auth()->user()->id)
                 <div class="dt-ac-le">
                     <a href="{{ route('ui.article.edit-normal', $article[0]->slug) }}">Chỉnh sửa</a>
                     <a id="click_remove_{{$article[0]->id}}" href="#" onclick="javascript:void(0);" class="clickRemoveThis click-{{$article[0]->id}}">Xóa bài viết này</a>
@@ -299,6 +300,26 @@
             $('.form-comment').removeClass('form-edit');
             $('textarea[name="comment"]').val('');
             $('input[name="comment_edit"]').val('');
+        });
+        $(document).on('click', '.clickRemoveThis', function(e){
+            var id = $(this).attr('id').substr(13, 10);
+            $(this).ownConfirm({
+                ok_action: function(){
+                    $.ajax({
+                        type: 'GET',
+                        url: '{{ route('ui.article.handle-req') }}',
+                        data: {'q':'d-l-a', 'id': id},
+                        success: function(data){
+                            
+                        },
+                        error: function(error){
+
+                        }
+                    });
+                }
+            });
+            e.preventDefault();
+
         });
     });
 </script>

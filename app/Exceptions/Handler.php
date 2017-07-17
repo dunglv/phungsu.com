@@ -5,6 +5,9 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
+use Whoops\Handler\PrettyPageHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -61,5 +64,25 @@ class Handler extends ExceptionHandler
         }
 
         return redirect()->guest('login');
+    }
+
+    /**
+     * it overrides the whoopsHandler() method from the base class adding just one line of code (line 21)
+     *
+     * @return void
+     * @author 
+     **/
+    protected function whoopsHandler($value='')
+    {
+        return tap(new PrettyPageHandler, function ($handler) {
+        $files = new Filesystem;
+        $handler->setEditor('sublime');
+        $handler->handleUnconditionally(true);
+        $handler->setApplicationPaths(
+            array_flip(Arr::except(
+                array_flip($files->directories(base_path())), [base_path('vendor')]
+            ))
+        );
+    });
     }
 }

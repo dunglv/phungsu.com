@@ -77,8 +77,24 @@
 		btnN.onmouseleave = function(){this.style="padding:5px 10px;text-align:left;background:"+config.action.cancel.color+";color:#fff;display:inline-block;user-select:none;"}
 
 		body.append(md);
+	}
 
-
-
+	$.fn.ownModal = function(options){
+		var config = $.extend({
+			title: 'Confirm action',
+			content: 'Do you want to continute this action?',
+			action: {
+				ok: {
+					label: 'Yes',
+					color: '#4caf50'
+				},
+				cancel: {
+					label: 'No',
+					color: '#f44336'
+				}
+			},
+			ok_action: function()
+			}, options);
+		});
 	}
 }(jQuery));

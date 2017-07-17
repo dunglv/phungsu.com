@@ -167,6 +167,7 @@ class HandleController extends Controller
         $a->opencomment = $request->get('opencomment');
         $a->openedit = $request->get('openedit');
         $a->notify = $request->get('notify');
+        $a->filename = $thumb;
         // $a->active = $request->get('active');
         if($a->save()){
             // Handle tag and store pivot
@@ -262,7 +263,8 @@ class HandleController extends Controller
      **/
     public function article_detail($slug="")
     {
-        $article = Article::where('slug', $slug)->where('active', 1)->get();
+        $article = Article::where('slug', $slug)->where('active', 1)->where('format', 0)->get();
+        // dd($article);
         if (count($article) > 0) {
             $sames = Article::whereHas('category', function($q) use($article){
                 $q->where('id', $article[0]->category[0]->id);
