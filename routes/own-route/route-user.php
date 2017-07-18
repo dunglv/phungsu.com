@@ -81,4 +81,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
 		'as' => 'ad.u.change-password-update',
 		'uses' => 'AdminController@user_change_password_update'
 		]);
+	Route::get('user/{id}', [
+		'as' => 'ad.u.detail',
+		'uses' => 'AdminController@user_detail'
+		]);
 });

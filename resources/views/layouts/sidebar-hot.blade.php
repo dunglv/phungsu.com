@@ -24,7 +24,14 @@
                         </span>
                     </div>
                     <div class="bl-i-r">
-                        <div class="bl-hh"><a href="{{ route('ui.article.detail-normal', $a->slug) }}">{{$a->title}}</a></div>
+                        <div class="bl-hh">
+                            @if($a->format === 0)
+                                <a href="{{ route('ui.article.detail-normal', $a->slug) }}">{{$a->title}}</a>
+                            @elseif($a->format === 1)
+                                <a href="{{ route('ui.article.detail-audio', $a->slug) }}">{{$a->title}}</a>
+                            @endif
+                            
+                        </div>
                         <div class="bl-ext">{{str_limit($a->content, 60, '...')}}</div>
                     </div>
                 </div>

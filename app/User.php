@@ -47,4 +47,39 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\ActiveUser', 'user_id');
     }
+
+    /**
+     * Get latest article of this user
+     *
+     * @return void
+     * @author 
+     **/
+    public function latestArticle()
+    {
+        $a = Article::where('user_id', $this->id)->orderBy('id', 'desc')->first();
+        if (count($a) > 0) {
+            return $a;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * Get latest comment of this user
+     *
+     * @return void
+     * @author 
+     **/
+    public function latestComment()
+    {
+        $c = Comment::whereHas('user', function($q){
+            $q->where('user_id', $this->id);
+        })->orderBy('id', 'desc')->first();
+        // dd($c->article[0]->id);
+        if (count($c) > 0) {
+            return $c;
+        }else{
+            return null;
+        }
+    }
 }

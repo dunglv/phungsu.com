@@ -27,7 +27,10 @@ class HandleController extends Controller
     public function home()
     {
         $articles = Article::where('active', 1)->orderBy('id', 'desc')->take(4)->get();
-        $categories = Category::where('active', 1)->take(4)->get();
+        $categories = Category::with(['article' => function($q){
+            $q->where('active', 1);
+        }])->where('active', 1)->take(4)->get();
+        // dd($categories[0]->article);
     	return view('partials.home')->with(['articles' => $articles, 'categories' => $categories]);
     }
 
@@ -236,7 +239,7 @@ class HandleController extends Controller
         $a->description = $desc;
         $a->format = $format;
         $a->content = $content;
-        $audio = ($request->hasFile('audio'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('audio')->getClientOriginalName())).'.'.$request->file('audio')->getClientOriginalExtension():'default.mp3';
+        $audio = ($request->hasFile('audio'))?md5(preg_replace('/.mp3$|.wav$|.amr$/i', '', $request->file('audio')->getClientOriginalName())).'.'.$request->file('audio')->getClientOriginalExtension():NULL;
         $a->thumbnail = ($request->hasFile('audio'))?$public_audio_url.$audio:NULL;
         $a->opencomment = $request->get('opencomment');
         $a->openedit = $request->get('openedit');
@@ -251,7 +254,7 @@ class HandleController extends Controller
             }
             if ($request->hasFile('audio')) {
                 $request->file('audio')->move(public_path().'/audio/upload', $audio);
-                $a->filename = $thumb;
+                $a->filename = $audio;
             }
             $a->category()->attach($request->get('category'));
             $a->stat()->save(new Stat(['article_id' => $a->id]));

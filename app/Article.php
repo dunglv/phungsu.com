@@ -10,7 +10,7 @@ class Article extends Model
 
     public function category()
     {
-    	return $this->belongsToMany('App\Category');
+    	return $this->belongsToMany('App\Category', 'article_category', 'article_id', 'category_id');
     }
 
     public function user()
@@ -32,4 +32,6 @@ class Article extends Model
     {
         return $this->belongsToMany('App\Comment', 'article_comment', 'article_id', 'comment_id');
     }
+
+    
 }

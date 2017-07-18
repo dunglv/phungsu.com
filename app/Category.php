@@ -10,6 +10,6 @@ class Category extends Model
 
     public function article()
     {
-    	return $this->belongsToMany('App\Article');
+    	return $this->belongsToMany('App\Article', 'article_category', 'category_id', 'article_id');
     }
 }

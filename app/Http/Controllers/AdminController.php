@@ -30,7 +30,7 @@ class AdminController extends Controller
         $latest_a = Article::where('active', 1)->orderBy('id', 'desc')->take(10)->get();
         $latest_u = User::where('auth', 0)->orderBy('id', 'desc')->take(10)->get();
         $latest_c = Comment::where('active', 1)->orderBy('id', 'desc')->take(10)->get();
-        dd($latest_c[1]->article);
+        // dd($latest_c[0]->article);
     	return view('admin.partials.home')->with(array('articles' => $articles, 'users' => $users, 'comments' => $comments, 'latest_a' => $latest_a, 'latest_u' => $latest_u, 'latest_c' => $latest_c));
     }
 
@@ -761,6 +761,15 @@ class AdminController extends Controller
     	# code...
     }
 
+    public function user_detail($id='')
+    {
+        $user = User::find($id);
+        if (count($user) < 1) {
+            return redirect()->back();
+        }
+
+        return view('admin.user.detail')->with(['user' => $user]);
+    }
 
     public function finish_register()
     {
