@@ -30,6 +30,7 @@ class AdminController extends Controller
         $latest_a = Article::where('active', 1)->orderBy('id', 'desc')->take(10)->get();
         $latest_u = User::where('auth', 0)->orderBy('id', 'desc')->take(10)->get();
         $latest_c = Comment::where('active', 1)->orderBy('id', 'desc')->take(10)->get();
+        dd($latest_c[1]->article);
     	return view('admin.partials.home')->with(array('articles' => $articles, 'users' => $users, 'comments' => $comments, 'latest_a' => $latest_a, 'latest_u' => $latest_u, 'latest_c' => $latest_c));
     }
 

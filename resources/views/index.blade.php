@@ -14,6 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Latest compiled and minified JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    {!!Html::style('/public/js/lib/select2/select2.min.css')!!}
     {!!Html::style('/public/css/common.css')!!}
     {!!Html::style('/public/css/style.css')!!}
     {!!Html::style('/public/css/article.css')!!}
@@ -26,6 +27,7 @@
     {!!Html::script('/public/js/lib/layout-masonry.min.js')!!}
     {!!Html::script('/public/js/gnlJpY4-pl-own.js')!!}
     {!!Html::script('/public/js/txB56mM-main.js')!!}
+    {!!Html::script('/public/js/lib/select2/select2.min.js')!!}
     @yield('style')
     @yield('t-script')
 </head>

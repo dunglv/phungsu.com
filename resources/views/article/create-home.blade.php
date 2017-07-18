@@ -8,8 +8,8 @@
     </div>
     <div class="col-md-12">
         <div class="hc-create">
-            <a href="{{ route('ui.article.create-article') }}"><i class="fa fa-pencil"></i> Viết bài</a>
-            <a href="{{ route('ui.article.upload-mp3') }}"><i class="fa fa-music"></i> Upload bài hát</a>
+            <a href="{{ route('ui.article.create-normal') }}"><i class="fa fa-pencil"></i> Viết bài</a>
+            <a href="{{ route('ui.article.upload-audio') }}"><i class="fa fa-music"></i> Upload bài hát</a>
             <a href="{{ route('ui.article.upload-video') }}"><i class="fa fa-video-camera"></i> Upload Video</a>
             <a href="{{ route('ui.article.upload-image') }}"><i class="fa fa-camera"></i> Upload ảnh</a>
             <a href="{{ route('ui.you.contribute') }}"><i class="fa fa-inbox"></i> Đóng góp ý kiến</a>
@@ -36,9 +36,9 @@
                             </div>
                             <div class="h-i-item">
                                 @if($ar->format === 0)
-                                    <h3><a href="{{route('ui.article.detail', $ar->slug)}}">{{$ar->title}}</a></h3>
+                                    <h3><a href="{{route('ui.article.detail-normal', $ar->slug)}}">{{$ar->title}}</a></h3>
                                 @elseif($ar->format === 1)
-                                    <h3><a href="{{route('ui.article.detail-mp3', $ar->slug)}}">{{$ar->title}}</a></h3>
+                                    <h3><a href="{{route('ui.article.detail-audio', $ar->slug)}}">{{$ar->title}}</a></h3>
                                 @endif
                                 <div class="h-desc">
                                     @if(empty($ar->description))

@@ -25,9 +25,9 @@
                             </div>
                             <div class="h-i-item">
                                 @if($a->format === 0)
-                                    <h3><a href="{{route('ui.article.detail', $a->slug)}}">{{$a->title}}</a></h3>
+                                    <h3><a href="{{route('ui.article.detail-normal', $a->slug)}}">{{$a->title}}</a></h3>
                                 @elseif($a->format === 1)
-                                    <h3><a href="{{route('ui.article.detail-mp3', $a->slug)}}">{{$a->title}}</a></h3>
+                                    <h3><a href="{{route('ui.article.detail-audio', $a->slug)}}">{{$a->title}}</a></h3>
                                 @endif
                                 <div class="h-desc">
                                     @if(empty($a->description))
@@ -76,9 +76,9 @@
                             </div>
                             <div class="h-i-item">
                                 @if($ar->format === 0)
-                                    <h3><a href="{{route('ui.article.detail', $ar->slug)}}">{{$ar->title}}</a></h3>
+                                    <h3><a href="{{route('ui.article.detail-normal', $ar->slug)}}">{{$ar->title}}</a></h3>
                                 @elseif($ar->format === 1)
-                                    <h3><a href="{{route('ui.article.detail-mp3', $ar->slug)}}">{{$ar->title}}</a></h3>
+                                    <h3><a href="{{route('ui.article.detail-audio', $ar->slug)}}">{{$ar->title}}</a></h3>
                                 @endif
                                 <div class="h-desc">
                                     @if(empty($ar->description))

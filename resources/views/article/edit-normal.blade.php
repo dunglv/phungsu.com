@@ -34,7 +34,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-12">
-        <h3 class="" style="font-weight: 900;text-align: center;margin-bottom: 30px;max-width: 70%;margin-left: auto;margin-right: auto;">Chỉnh sửa <a href="{{ route('ui.article.detail', $article->slug) }}" target="_blank">{{$article->title}}</a></h3>
+        <h3 class="" style="font-weight: 900;text-align: center;margin-bottom: 30px;max-width: 70%;margin-left: auto;margin-right: auto;">Chỉnh sửa <a href="{{ route('ui.article.detail-normal', $article->slug) }}" target="_blank">{{$article->title}}</a></h3>
     </div>
     {!!Form::open(array( 'route' => ['ui.article.edit-normal-update', $article->slug], 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true ))!!}
     <div class="col-md-9">
@@ -76,9 +76,9 @@
                          @if(!empty($article->content))
                             {!!$article->content!!}
                          @else
-                            <span style="color: #ccc;font-size:1.2em;">Chưa có nội dung để hiển thị</span
+                            <span style="color: #ccc;font-size:1.2em;">Chưa có nội dung để hiển thị</span>
                          @endif
-                     ></div>
+                     </div>
                  </div>
             </div>
         </div>
@@ -90,8 +90,6 @@
                  <input type="hidden" name="old_thumbnail" value="{{$article->thumbnail}}">
             </div>
         </div>
-        @if(\Session::has('flash_error')) <span class="error">Add new article was failed</span>@endif
-         @if(\Session::has('flash_success')) <span class="success">Add new article successful</span>@endif
     </div>
     <div class="col-md-3">
         <div class="sidebar">
@@ -112,20 +110,19 @@
             <div class="bl-sc">
                 <div class="bl-t">Tag</div>
                 <div class="bl-ct">
-                    <div class="bl-tag @if(!empty($errors->first('tags'))) error-box @endif">
-                        <div class="bl-l-tag">
+                    <select name="" id="" class="tag-select-in" multiple="multiple" style="width: 100%;border: 1px solid #ccc;display: block;">
+                        @foreach($tags as $tag)
+                            <option value="{{$tag->id}}">{{$tag->title}}</option>
+                        @endforeach
+                    </select>
+                    @php
+                        $t = '';
+                    @endphp
+                    @foreach($article->tags as $tag)
                         @php
-                            $t = '';
+                            $t .= ','.$tag->id;
                         @endphp
-                            @foreach($article->tags as $tag)
-                                <span class="tag-i">{{$tag->title}}</span>
-                                @php
-                                    $t .= ','.$tag->id;
-                                @endphp
-                            @endforeach
-                        </div>
-                        <input type="text" class="tag-in">
-                    </div>
+                    @endforeach
                     @if($errors->has('tags') > 0)<span class="error">{{$errors->first('tags')}}</span>@endif
                     <input type="hidden" name="tags" value="{{trim($t, ',')}}">
                 </div>
@@ -163,6 +160,7 @@
                 </div>
                 
                 <div class="bl-ct">
+                    <input type="hidden" name="format" value="0">
                     <button type="submit" class="btn btn-sm btn-success">Lưu</button>
                     <button type="button" class="btn btn-sm btn-danger">Hủy bỏ</button>
                 </div>
@@ -241,61 +239,24 @@
             var t = slug($(this).val());
                 $('input[name="slug"]').val(t);
         });
-        $('.bl-tag').on('click', function(){
-            $(this).children('.tag-in').focus();
-        });
-        var dt;
-        // var dt =[{"label": "gdgjdhhd", "id": 1}];
-        $.ajax({
-            async: false,
-            type: 'GET',
-            url: '{{ route('ui.article.handle-req') }}',
-            data: {'q':'l-t-t'},
-            success: function(data){
-                dt =  data.l;
-            }
-        });
-        // $('.tag-in').on('keyup', function(e){
-        //     if (e.keyCode === 188 && e.which === 188) {
-        //         var t = $(this).val();
-        //         t = t.replace(/(^\,+)/, '');
-        //         t = t.replace(/(\,+$)/, '');
-        //         if (t.length > 0) {
-        //             $(this).val('').parent('.bl-tag').find('.bl-l-tag').append('<span class="tag-i">'+t+'</span>');
-        //         }
-        //     }
+        // $('.bl-tag').on('click', function(){
+        //     $(this).children('.tag-in').focus();
         // });
-        // console.log(dt);
-        $('.tag-in').autocomplete({
-           
-            source: dt,
-            search: function(e, ui){
-                console.log(dt);
-            },
-            
-            response: function(e, ui){
-                // console.log(ui);
-            },
-            
-            close: function(e, ui){
-                console.log('close');
-            }, 
-            focus: function(e, ui){
-                console.log('focus');
-            },
-            open: function(e, ui){
-                // console.log(ui);
-            },
-            select: function(e, ui){
-                // console.log(ui);
+        // var dt;
+        $('.tag-select-in').select2({
+            placeholder: 'Chọn một thẻ...',
+        })
+        .on('select2:select', function(evt, e){
                 var atag = $('input[name="tags"]').val();
-
-                $(this).parent('.bl-tag').find('.bl-l-tag').append('<span class="tag-i">'+ui.item.label+'</span>');
-                $('.tag-in').val('');
-                atag += ','+ui.item.id;
+                atag += ','+evt.params.data.id;
                 $('input[name="tags"]').val(atag.replace(/^\,+/, ''));
-            }
-
+        })
+        .val(JSON.parse('['+$('input[name="tags"]').val()+']')).trigger('change')
+        .on('select2:unselect', function(evt){
+            var atag = $('input[name="tags"]').val();
+            var rg = new RegExp('\,'+evt.params.data.id+'|'+evt.params.data.id+'\,|^'+evt.params.data.id+'$', 'g');
+            atag = atag.replace(rg, '');
+            $('input[name="tags"]').val(atag.replace(/^\,+/, ''));
         });
     });
 </script>

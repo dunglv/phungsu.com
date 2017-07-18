@@ -30,6 +30,6 @@ class Article extends Model
 
     public function comments()
     {
-        return $this->belongsToMany('App\Comment');
+        return $this->belongsToMany('App\Comment', 'article_comment', 'article_id', 'comment_id');
     }
 }

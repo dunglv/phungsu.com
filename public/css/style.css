@@ -17,12 +17,24 @@ img {
 }
 
 footer {
-    padding-top: 20px;
+    padding-top: 0;
     padding-bottom: 20px;
     border-top: 1px solid #ececec;
-    background: #fff;
+    position: relative;
+    background: #000;
+    color: #4CAF50;
+    margin-top: 130px;
 }
-
+footer::before{
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: url(../images/ui/footer-black.png) repeat-x;
+    background-size: 260px 100px;
+}
 ::selection {
     background: #4caf50 !important;
     /* WebKit/Blink Browsers */
@@ -71,9 +83,16 @@ a:focus {
     display: table;
     width: 100%;
 }
+.navbar{
+    border-radius: 0;
+}
+.navbar .navbar-collapse > ul > li > a{
+    /*color: #fff;*/
+}
 .navbar-brand {
     display: block;
     padding: 5px 10px;
+    /*background: #fff;*/
 }
 
 .navbar-brand img {
@@ -272,13 +291,13 @@ a:focus {
 }
 
 .bl-sc .bl-ct a {
-    padding: 3px;
-    background: #eaeaea;
-    line-height: 1;
-    margin-bottom: 5px;
-    display: block;
-    border=r: ;
-    border-radius: 3px;
+    /* padding: 3px; */
+    /* background: #eaeaea; */
+    /* line-height: 1; */
+    /* margin-bottom: 5px; */
+    /* display: block; */
+    border=r:;
+    /* border-radius: 3px; */
 }
 
 .bl-sc .bl-ct a span {

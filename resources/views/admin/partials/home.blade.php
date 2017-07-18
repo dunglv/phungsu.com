@@ -137,10 +137,16 @@
                     <div class="list-group">
                     @if(isset($latest_a) && $latest_a->count() > 0)
                         @foreach($latest_a as $a)
-                        <a href="{{ route('ui.article.detail', $a->slug) }}" class="list-group-item">
-                            <span class="badge" title="{{$a->created_at->format('Y-m-d H:i:s')}}">{{ \Helper::datetime_recent($a->created_at->format('Y-m-d H:i:s')) }} trước</span>
-                            <i class="fa fa-fw fa-bitcoin"></i> {{$a->title}}
-                        </a>
+                            @if($a->format == 0)
+                            <a href="{{ route('ui.article.detail-normal', $a->slug) }}" class="list-group-item">
+                            <?php $icon = 'pencil'; $label="warning";?>
+                            @elseif($a->format==1)
+                            <a href="{{ route('ui.article.detail-audio', $a->slug) }}" class="list-group-item">
+                            <?php $icon = 'music';$label="success";?>
+                            @endif
+                                <span class="badge" title="{{$a->created_at->format('Y-m-d H:i:s')}}">{{ \Helper::datetime_recent($a->created_at->format('Y-m-d H:i:s')) }} trước</span>
+                                <span class="label label-{{$label}}"><i class="fa fa-fw fa-{{$icon}}"></i></span> {{$a->title}}
+                            </a>
                         @endforeach
                     @else
                     <p>Chưa có đóng góp nào</p>
@@ -161,7 +167,7 @@
                     <div class="list-group">
                      @if(isset($latest_c) && $latest_c->count() > 0)
                         @foreach($latest_c as $c)
-                        <a href="#" class="list-group-item">
+                        <a href="{{ route('ui.article.detail-normal', $c->article[0]->slug) }}#cmt_{{$c->id}}" class="list-group-item">
                             <span class="badge" title="{{$c->created_at->format('Y-m-d H:i:s')}}">{{ \Helper::datetime_recent($c->created_at->format('Y-m-d H:i:s')) }} trước</span>
                             <i class="fa fa-fw fa-comment-o"></i> {{$c->comment}}
                         </a>

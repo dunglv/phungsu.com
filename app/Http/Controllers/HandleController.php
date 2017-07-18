@@ -9,6 +9,8 @@ namespace App\Http\Controllers;
 */
 use App\Http\Requests\ArticleRequest;
 use App\Http\Requests\ArticleUpdateRequest;
+use App\Http\Requests\CreateAudioRequest;
+use App\Http\Requests\UpdateAudioRequest;
 use Illuminate\Http\Request;
 use Auth;
 use App\Category;
@@ -39,13 +41,12 @@ class HandleController extends Controller
      **/
     public function article_create_home()
     {
-        $articles = Article::inRandomOrder()->where('active', 1)->get();
+        $articles = Article::inRandomOrder()->where('active', 1)->take(4)->get();
         return view('article.create-home')->with(['articles' => $articles]);
     }
 
-
     /**
-     * Ger view form create article normal
+     * Get view form create article normal
      *
      * @return void
      * @author 
@@ -53,7 +54,8 @@ class HandleController extends Controller
     public function article_create_normal()
     {
         $cates = Category::all()->where('active', 1);
-    	return view('article.create-article')->with('cates', $cates);
+        $tags = Tag::all()->where('active', 1);
+    	return view('article.create-normal')->with(['cates' => $cates, 'tags' => $tags]);
     }
 
     /**
@@ -68,6 +70,7 @@ class HandleController extends Controller
         $title = $request->get('title');
         $slug = $request->get('slug');
         $desc = $request->get('description');
+        $format = $request->get('format');
         $content = $request->get('content');
         $thumb = $request->file('thumbnail');
         $cate = $request->get('category');
@@ -81,11 +84,11 @@ class HandleController extends Controller
         $a->title = $title;
         $a->slug = $slug;
         $a->description = $desc;
-        $a->format = 0;
+        $a->format = $format;
         $a->content = $content;
         $a->user_id = auth()->user()->id;
-        $thumb = ($request->hasFile('thumbnail'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('thumbnail')->getClientOriginalName())).'.'.$request->file('thumbnail')->getClientOriginalExtension():'default.jpg';
-        $a->thumbnail = $public_image_url.$thumb;
+        $thumb = ($request->hasFile('thumbnail'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('thumbnail')->getClientOriginalName())).'.'.$request->file('thumbnail')->getClientOriginalExtension():NULL;
+        $a->thumbnail = ($request->hasFile('thumbnail'))?$public_image_url.$thumb:NULL;
         $a->opencomment = $request->get('opencomment');
         $a->openedit = $request->get('openedit');
         $a->notify = $request->get('notify');
@@ -98,32 +101,34 @@ class HandleController extends Controller
             }
             if ($request->hasFile('thumbnail')) {
                 $request->file('thumbnail')->move(public_path().'/images/upload/article', $thumb);
+                $a->filename = $thumb;
             }
+
             $a->category()->attach($cate);
             $a->stat()->save(new Stat(['article_id' => $a->id]));
-            return redirect()->route('ui.article.create-article')->with('flash_success', 'Add new article successful.');
+            return redirect()->route('ui.article.create-article')->with(['status' => 'success', 'label' => 'Thành công', 'mesage' => 'Thêm bài viết thành công']);
         }else{
-            return redirect()->back()->with('flash_error', 'Create new article is failed');
+            return redirect()->back()->with(['status' => 'danger', 'label' => 'Lỗi', 'mesage' => 'Thêm bài viết không thành công']);
         }
 
     }
 
     /**
      * Ger view form edit article normal
-     *
+     * @param slug
      * @return void
      * @author 
      **/
     public function article_edit_normal($slug='')
     {
-        $article = Article::where('slug', $slug)->where('active', 1)->get();
+        $article = Article::where('slug', $slug)->where('active', 1)->first();
         if ($article->count() > 0) {
             $cates = Category::all()->where('active', 1);
-            return view('article.edit-normal')->with(['article' => $article[0], 'cates' => $cates]);
+            $tags = Tag::all()->where('active', 1);
+            return view('article.edit-normal')->with(['article' => $article, 'cates' => $cates, 'tags' => $tags]);
         }else{
             return redirect()->back();
         }
-        
     }
 
     /**
@@ -137,6 +142,7 @@ class HandleController extends Controller
         $title = $request->get('title');
         $slugd = $request->get('slug');
         $desc = $request->get('description');
+        $format = $request->get('format');
         $content = $request->get('content');
         $thumb = $request->file('thumbnail');
         $cate = $request->get('category');
@@ -146,15 +152,14 @@ class HandleController extends Controller
         $notify = $request->get('notify');
         
         $public_image_url = url('/').'/public/images/upload/article/';
-        $ar = Article::where('slug', $slug)->where('active', 1)->where('user_id', auth()->user()->id)->get();
-        if ($ar->count() < 1) {
+        $a = Article::where('slug', $slug)->where('active', 1)->where('user_id', auth()->user()->id)->first();
+        if ($a->count() < 1) {
             return redirect()->back();
         }
-        $a = $ar[0];
         $a->title = $title;
         $a->slug = $slugd;
         $a->description = $desc;
-        $a->format = 0;
+        $a->format = $format;
         $a->content = $content;
         $a->user_id = auth()->user()->id;
         // dd($request->hasFile('thumbnail'));
@@ -172,14 +177,14 @@ class HandleController extends Controller
         if($a->save()){
             // Handle tag and store pivot
             $tgs = explode(',', $tag);
-            for ($i=0; $i < count($tgs); $i++) { 
-                $a->tags()->sync([$tgs[$i]]);
-            }
+            // for ($i=0; $i < count($tgs); $i++) { 
+            //     $a->tags()->sync([$tgs[$i]]);
+            // }
+            $a->tags()->sync($tgs);
             if ($request->hasFile('thumbnail')) {
                 $request->file('thumbnail')->move(public_path().'/images/upload/article', $thumb);
             }
             $a->category()->sync([$cate]);
-            $a->stat()->save(new Stat(['article_id' => $a->id]));
             return redirect()->route('ui.article.edit-normal', $a->slug)->with(['status' => 'success', 'message' => 'Cập nhật bài viết thành công', 'label' => 'Thành công']);
         }else{
             return redirect()->back()->with(['status' => 'danger', 'message' => 'Cập nhật bài viết không thành công', 'label' => 'Lỗi']);
@@ -195,10 +200,11 @@ class HandleController extends Controller
      * Store article
      * FORMAT : 1
      **/
-    public function article_create_mp3()
+    public function article_create_audio()
     {
     	$cates = Category::all()->where('active', 1);
-        return view('article.upload-mp3')->with('cates', $cates);
+        $tags = Tag::all()->where('active', 1);
+        return view('article.upload-audio')->with(['cates' => $cates, 'tags' => $tags]);
     }
 
 
@@ -208,7 +214,7 @@ class HandleController extends Controller
      * @return void
      * @author 
      **/
-    public function article_create_mp3_store(ArticleRequest $request)
+    public function article_create_audio_store(CreateAudioRequest $request)
     {
         $title = $request->get('title');
         $slug = $request->get('slug');
@@ -231,7 +237,7 @@ class HandleController extends Controller
         $a->format = $format;
         $a->content = $content;
         $audio = ($request->hasFile('audio'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('audio')->getClientOriginalName())).'.'.$request->file('audio')->getClientOriginalExtension():'default.mp3';
-        $a->thumbnail = $public_audio_url.$audio;
+        $a->thumbnail = ($request->hasFile('audio'))?$public_audio_url.$audio:NULL;
         $a->opencomment = $request->get('opencomment');
         $a->openedit = $request->get('openedit');
         $a->user_id = auth()->user()->id;
@@ -245,15 +251,85 @@ class HandleController extends Controller
             }
             if ($request->hasFile('audio')) {
                 $request->file('audio')->move(public_path().'/audio/upload', $audio);
+                $a->filename = $thumb;
             }
             $a->category()->attach($request->get('category'));
-             $a->stat()->save(new Stat(['article_id' => $a->id]));
-            return redirect()->route('ui.article.create-article')->with('flash_success', 'Add new article successful.');
+            $a->stat()->save(new Stat(['article_id' => $a->id]));
+            return redirect()->route('ui.article.upload-audio')->with(['status' => 'success', 'message' => 'Thêm mới bài viết thành công', 'label' => 'Thành công']);
         }else{
-            return redirect()->back()->with('flash_error', 'Create new article is failed');
+            return redirect()->back()->with(['status' => 'danger', 'message' => 'Thêm mới bài viết không thành công', 'label' => 'Lỗi']);
         }
     }
 
+    /**
+     * Get view edit article with format audio
+     *
+     * @return void
+     * @author 
+     **/
+    public function article_edit_audio($slug = '')
+    {
+        $article = Article::where('slug', $slug)->where('active', 1)->where('user_id', auth()->user()->id)->first();
+        if ($article->count() < 1 || !auth()->check()) {
+            return redirect()->back();
+        }
+        $cates = Category::all()->where('active', 1);
+        $tags = Tag::all()->where('active', 1);
+        return view('article.edit-audio')->with(['cates' => $cates, 'tags' => $tags, 'article' => $article]);
+    }
+
+    /**
+     * Save new article audio
+     *
+     * @return void
+     * @author 
+     **/
+    public function article_edit_audio_update($slug = '', UpdateAudioRequest $request)
+    {
+        $title = $request->get('title');
+        $slug_d = $request->get('slug');
+        $desc = $request->get('description');
+        $author = ($request->has('author'))?$request->get('author'):NULL;
+        $content = $request->get('content');
+        $mp3 = $request->file('audio');
+        $format = 1; // 0: normal - 1: mp3 - 2: video
+        $cate = $request->get('category');
+        $tag = $request->get('tags');
+        $opencmt = $request->get('opencomment');
+        $openedit = $request->get('openedit');
+        $notify = $request->get('notify');
+        
+        $public_audio_url = url('/').'/public/audio/upload/';
+        $a = Article::where('slug', $slug)->where('active', 1)->where('user_id', auth()->user()->id)->first();
+        if ($a->count() < 1 || !auth()->check()) {
+            return redirect()->back();
+        }
+        $a->title = $title;
+        $a->slug = $slug_d;
+        $a->description = $desc;
+        $a->format = $format;
+        $a->content = $content;
+        $audio = ($request->hasFile('audio'))?md5(preg_replace('/.jpg$|.png$|.gif$|.bmp$|.jpeg$/i', '', $request->file('audio')->getClientOriginalName())).'.'.$request->file('audio')->getClientOriginalExtension():'default.mp3';
+        $a->thumbnail = ($request->hasFile('audio'))?$public_audio_url.$audio:$request->get('old_audio');
+        $a->opencomment = $request->get('opencomment');
+        $a->openedit = $request->get('openedit');
+        $a->user_id = auth()->user()->id;
+        $a->notify = $request->get('notify');
+        // $a->active = $request->get('active');
+        if($a->save()){
+            // Handle tag and store pivot
+            $tgs = explode(',', $tag);
+            $a->tags()->sync($tgs);
+            if ($request->hasFile('audio')) {
+                $request->file('audio')->move(public_path().'/audio/upload', $audio);
+                $a->filename = $thumb;
+            }
+            $a->category()->sync([$request->get('category')]);
+            return redirect()->route('ui.article.edit-audio', $a->slug)->with(['status' => 'success', 'message' => 'Cập nhật bài viết thành công', 'label' => 'Thành công']);
+        }else{
+            return redirect()->back()->with(['status' => 'danger', 'message' => 'Cập nhật bài viết không thành công', 'label' => 'Lỗi']);
+        }
+    }
 
     /**
      * Detail article normal (Slug)
@@ -261,7 +337,7 @@ class HandleController extends Controller
      * @return void
      * @author 
      **/
-    public function article_detail($slug="")
+    public function article_detail_normal($slug="")
     {
         $article = Article::where('slug', $slug)->where('active', 1)->where('format', 0)->get();
         // dd($article);
@@ -273,7 +349,7 @@ class HandleController extends Controller
                 $q->where('slug', $slug);
             })->where('parent', NULL)->paginate(10);
             event(new ArticleStatEvent('view', $article[0]));
-    	    return view('article.detail-article')->with(['article' => $article, 'comments' => $comments, 'sames' => $sames]);
+    	    return view('article.detail-normal')->with(['article' => $article, 'comments' => $comments, 'sames' => $sames]);
         }else{
             return redirect()->route('ui.home');
         }
@@ -286,7 +362,7 @@ class HandleController extends Controller
      * @return void
      * @author 
      **/
-    public function article_detail_mp3($slug="")
+    public function article_detail_audio($slug="")
     {
         $article = Article::where('slug', $slug)->where('active', 1)->get();
         $comments = Comment::whereHas('article', function($q) use ($slug){
@@ -294,7 +370,7 @@ class HandleController extends Controller
         })->where('parent', NULL)->paginate(10);
 
         if (count($article) > 0) {
-            return view('article.detail-mp3')->with(['article' => $article, 'comments' => $comments]);
+            return view('article.detail-audio')->with(['article' => $article, 'comments' => $comments]);
         }else{
             return redirect()->route('ui.home');
         }
@@ -337,6 +413,18 @@ class HandleController extends Controller
                     $a[] = array('label' => $tt->title, 'id' => $tt->id);
                 }
                 return array('l' => $a, 't' => $t);
+            }elseif($q === base64_encode('d-l-a')){
+                if ($request->has('id')) {
+                    $id = base64_decode($request->get('id', 'NULL'));
+                }
+                $a = Article::find($id);
+                if ($a->count() < 1) {
+                    return array('status' => 0, 'redirect' => url('/'));
+                }
+                if ($a->delete()) {
+                    return array('status' => 1, 'redirect' => url('/'), );
+                }
+                return array('status' => 0, 'redirect' => url('/'), );
             }
         }else{
             return false;

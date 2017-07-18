@@ -24,7 +24,7 @@
                         </span>
                     </div>
                     <div class="bl-i-r">
-                        <div class="bl-hh"><a href="{{ route('ui.article.detail', $a->slug) }}">{{$a->title}}</a></div>
+                        <div class="bl-hh"><a href="{{ route('ui.article.detail-normal', $a->slug) }}">{{$a->title}}</a></div>
                         <div class="bl-ext">{{str_limit($a->content, 60, '...')}}</div>
                     </div>
                 </div>

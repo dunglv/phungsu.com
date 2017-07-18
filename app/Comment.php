@@ -15,7 +15,7 @@ class Comment extends Model
 
     public function article()
     {
-    	return $this->belongsToMany('App\Article');
+    	return $this->belongsToMany('App\Article', 'article_comment', 'article_id', 'comment_id');
     }
 
     public function children($parent)
