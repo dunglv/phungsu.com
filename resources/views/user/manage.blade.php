@@ -25,7 +25,7 @@
                                         </a>
                                     </div>
                                     <div class="media-body" style="font-size: 1em;width:90%;">
-                                        <h4 class="media-heading" style="font-size: 1em;font-weight: 700"><a href="{{ route('ui.article.detail', $a->slug) }}">{{$a->title}}</a></h4>
+                                        <h4 class="media-heading" style="font-size: 1em;font-weight: 700"><a href="{{ route('ui.article.detail-normal', $a->slug) }}">{{$a->title}}</a></h4>
                                         <p>Trong <a href="{{ route('ui.category.detail', $a->category[0]->slug) }}">{{$a->category[0]->title}}</a></p>
                                         <p>
                                             @foreach($a->tags as $tag)
@@ -58,8 +58,8 @@
                             <td>
                                 <div class="media">
                                     <div class="media-body" style="font-size: 1em;">
-                                        <h4 class="media-heading" style="font-size: 1em;font-weight: 700"><a href="{{ route('ui.article.detail', $c->id) }}">{{$c->comment}}</a></h4>
-                                        <p>Trong <a href="{{ route('ui.article.detail', $c->article[0]->slug) }}">{{$c->article[0]->title}}</a></p>
+                                        <h4 class="media-heading" style="font-size: 1em;font-weight: 700"><a href="{{ route('ui.article.detail-normal', $c->id) }}">{{$c->comment}}</a></h4>
+                                        <p>Trong <a href="{{ route('ui.article.detail-normal', $c->article[0]->slug) }}">{{$c->article[0]->title}}</a></p>
                                     </div>
                                 </div>
                             </td>

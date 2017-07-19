@@ -763,7 +763,9 @@ class AdminController extends Controller
 
     public function user_detail($id='')
     {
-        $user = User::find($id);
+        $user = User::where('id', $id)->where(function($q){
+            $q->where('active', 1)->orWhere('active', 2);
+        })->where('auth', 0)->first();
         if (count($user) < 1) {
             return redirect()->back();
         }

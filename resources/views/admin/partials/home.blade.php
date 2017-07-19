@@ -167,10 +167,18 @@
                     <div class="list-group">
                      @if(isset($latest_c) && $latest_c->count() > 0)
                         @foreach($latest_c as $c)
-                        <a href="{{ route('ui.article.detail-normal', $c->article[0]->slug) }}#cmt_{{$c->id}}" class="list-group-item">
+                        {{-- {{dd($c->article[0]->title)}} --}}
+                        @if($c->article->count() > 0)
+                        <a href="{{ route('ui.article.detail-normal', $c->article[0]->slug) }}#cmt_{{$c->id}}" class="list-group-item" target="_blank">
                             <span class="badge" title="{{$c->created_at->format('Y-m-d H:i:s')}}">{{ \Helper::datetime_recent($c->created_at->format('Y-m-d H:i:s')) }} trước</span>
                             <i class="fa fa-fw fa-comment-o"></i> {{$c->comment}}
                         </a>
+                        @else
+                            <a href="#cmt_{{$c->id}}" class="list-group-item">
+                                <span class="badge" title="{{$c->created_at->format('Y-m-d H:i:s')}}">{{ \Helper::datetime_recent($c->created_at->format('Y-m-d H:i:s')) }} trước</span>
+                                <i class="fa fa-fw fa-comment-o"></i> {{$c->comment}}
+                            </a>
+                        @endif
                         @endforeach
                     @else
                     <p>Chưa có bình luận nào</p>

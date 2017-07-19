@@ -434,8 +434,16 @@ class HandleController extends Controller
         }
     }
 
+    public function article_create_video()
+    {
+        return view('article.upload-video');
+    }
 
-    
+    public function article_create_image()
+    {
+        return view('article.upload-image');
+    }
+
     /**************************************************************************************
      * TAG (+tag)
      **************************************************************************************

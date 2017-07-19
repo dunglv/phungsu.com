@@ -54,7 +54,7 @@
                                 <td><span class="label label-success col-md-2" style="margin-right: 5px;display: inline-block;">Quyền:</span> {{$user->auth}}</td>
                             </tr>
                             <tr>
-                                <td><span class="label label-success col-md-2" style="margin-right: 5px;display: inline-block;">Trạng thái:</span> {{$user->active}}</td>
+                                <td><span class="label label-success col-md-2" style="margin-right: 5px;display: inline-block;">Trạng thái:</span>  @if($user->active==1) <i class="fa fa-circle" style="color:#5cb85c"></i> Đang hoạt động @else <i class="fa fa-circle"  style="color:#f44336"></i> Đã bị khóa @endif</td>
                             </tr>
                         </tbody>
                     </table>

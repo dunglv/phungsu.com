@@ -1,11 +1,13 @@
 html, body{
     height: 100%;
 }
+
 body {
     background: #f6fbff;
     font-size: 15px;
     font-family: "Open Sans", "Oswald", sans-serif;
     color: #333;
+    position: relative;
 }
 
 a {
@@ -48,7 +50,7 @@ footer::before{
 }
 
 #wp_content {
-    min-height: 80%;
+    min-height: 500px;
     padding-top: 20px;
     padding-bottom: 20px;
 }

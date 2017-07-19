@@ -51,7 +51,7 @@
 						@foreach($users as $u)
 						<tr>
 							<td>{{$u->id}}</td>
-							<td>{{$u->name}}</td>
+							<td><a href="{{ route('ad.u.detail', $u->id) }}">{{$u->name}}</a></td>
 							<td>{{$u->email}}</td>
 							<td>{{$u->provider}}</td>
 							<td>{{$u->fullname}}</td>

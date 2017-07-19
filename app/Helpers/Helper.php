@@ -34,4 +34,9 @@ class Helper
 		$diff = $now->diffForHumans($dt, true);
 		return $diff;
 	}
+
+	public function getDescription($description='', $alternative='', $length = 100)
+	{
+		
+	}
 }
