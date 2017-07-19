@@ -150,7 +150,34 @@ ul.alert-dropdown {
 .side-nav>li>ul {
     padding: 0;
 }
-
+.side-nav>li>ul>li{
+    position: relative;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+.side-nav>li>ul>li:first-child{
+    border-top: 1px solid rgba(0,0,0,0.2);
+}
+.side-nav>li>ul>li::before{
+    content: '';
+    height: 100%;
+    border-left: 2px dashed rgba(0,0,0,0.2);
+    position: absolute;
+    left: 2px;
+    top: 0;
+    z-index: 0;
+}
+.side-nav>li>ul>li::after{
+    content: '';
+    height: 8px;
+    width: 8px;
+    border-radius: 100%;
+    background: rgba(0,0,0,0.2);
+    position: absolute;
+    top: 50%;
+    margin-top: -4px;
+    left: -1px;
+    z-index: 1;
+}
 .side-nav>li>ul>li>a {
     display: block;
     padding: 10px 15px 10px 38px;

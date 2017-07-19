@@ -1,4 +1,5 @@
-html, body{
+html,
+body {
     height: 100%;
 }
 
@@ -27,7 +28,8 @@ footer {
     color: #4CAF50;
     margin-top: 130px;
 }
-footer::before{
+
+footer::before {
     content: '';
     position: absolute;
     top: -100px;
@@ -37,6 +39,7 @@ footer::before{
     background: url(../images/ui/footer-black.png) repeat-x;
     background-size: 260px 100px;
 }
+
 ::selection {
     background: #4caf50 !important;
     /* WebKit/Blink Browsers */
@@ -54,10 +57,13 @@ footer::before{
     padding-top: 20px;
     padding-bottom: 20px;
 }
-table th, table td{
+
+table th,
+table td {
     border: 1px solid #ddd;
     padding: 2px 5px;
 }
+
 a:hover,
 a:active,
 a:focus {
@@ -67,30 +73,39 @@ a:focus {
     -o-transition: 0.2s;
     transition: 0.2s;
 }
-.block-ss{}
-.block-ss .block-tt, .block-ss .block-tt h3{
+
+.block-ss {}
+
+.block-ss .block-tt,
+.block-ss .block-tt h3 {
     font-weight: 700;
     text-transform: uppercase;
     color: #4caf50;
     text-shadow: 0 0 1px;
 }
-.block-ss .block-tt h3, .block-ss .block-tt span{
+
+.block-ss .block-tt h3,
+.block-ss .block-tt span {
     display: table;
     border-bottom: 3px solid #333;
     padding-bottom: 5px;
     font-size: 1.5em;
 }
-.block-ct{
+
+.block-ct {
     position: relative;
     display: table;
     width: 100%;
 }
-.navbar{
+
+.navbar {
     border-radius: 0;
 }
-.navbar .navbar-collapse > ul > li > a{
+
+.navbar .navbar-collapse>ul>li>a {
     /*color: #fff;*/
 }
+
 .navbar-brand {
     display: block;
     padding: 5px 10px;
@@ -125,7 +140,7 @@ a:focus {
     position: relative;
 }
 
-.h-item .h-thumb .h-time{
+.h-item .h-thumb .h-time {
     position: absolute;
     top: 2px;
     left: 2px;
@@ -169,13 +184,15 @@ a:focus {
 }
 
 .h-item .h-hta {}
-.h-item.h-horizontal{
+
+.h-item.h-horizontal {
     display: inline-block;
     width: 100%;
     border-radius: 0;
     margin-bottom: 10px;
 }
-.h-item.h-horizontal .h-thumb{
+
+.h-item.h-horizontal .h-thumb {
     float: left;
     /* height: 100%; */
     width: 90px;
@@ -184,28 +201,33 @@ a:focus {
     /* padding: 2px; */
     border: 3px solid #fff;
 }
-.h-item.h-horizontal .h-i-item{
+
+.h-item.h-horizontal .h-i-item {
     float: right;
     width: calc(100% - 90px);
     padding-top: 0;
 }
-.h-item.h-horizontal h3{
+
+.h-item.h-horizontal h3 {
     font-size: 1em;
 }
 
-.h-item.h-horizontal .h-rr{
+.h-item.h-horizontal .h-rr {
     float: none;
     margin-top: 5px;
 }
-.h-item.h-horizontal .h-thumb img{
+
+.h-item.h-horizontal .h-thumb img {
     height: 100%;
     width: auto;
     max-width: 1000px;
 }
-.h-item.h-horizontal .h-rr span{
+
+.h-item.h-horizontal .h-rr span {
     margin-left: 0;
     margin-right: 10px;
 }
+
 .t-tag {
     position: relative;
     background: #4caf50;
@@ -298,7 +320,7 @@ a:focus {
     /* line-height: 1; */
     /* margin-bottom: 5px; */
     /* display: block; */
-    border=r:;
+    border=r: ;
     /* border-radius: 3px; */
 }
 
@@ -341,7 +363,7 @@ a:focus {
     width: 50px;
 }
 
-.bl-sc.bl-sa .bl-i-l > .bl-ct-l {
+.bl-sc.bl-sa .bl-i-l>.bl-ct-l {
     border: 1px solid rgba(0, 0, 0, 0.12);
     width: 50px;
     height: 50px;
@@ -353,13 +375,15 @@ a:focus {
     font-size: 1.7em;
     overflow: hidden;
 }
-.bl-sc.bl-sa .bl-i-l > .bl-ct-l img{
+
+.bl-sc.bl-sa .bl-i-l>.bl-ct-l img {
     min-height: 100%;
     width: auto;
     min-width: 100%;
     margin-top: -9px;
     max-width: 110%;
 }
+
 .bl-sc.bl-sa .bl-i-r {
     float: right;
     width: calc(100% - 50px);
@@ -419,30 +443,71 @@ a:focus {
     font-size: 2em;
     font-weight: 100;
     text-align: center;
-    text-shadow: 0 0 1px #fff,0 0 1px #fff,0 0 1px #fff,0 0 1px #fff,0 0 1px #fff,0 0 1px #fff;
-
+    text-shadow: 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #fff;
 }
 
 .bl-sc.bl-tag-t {
-        background: transparent;
+    background: transparent;
     border: 0;
     padding: 0;
 }
-.bl-sc.bl-tag-t  .bl-ct a{
+
+.bl-sc.bl-tag-t .bl-ct a {
     display: initial;
     background: transparent;
     margin: 0;
     font-weight: 100;
 }
-.bl-sc.bl-tag-t  .bl-ct a.small{
+
+.bl-sc.bl-tag-t .bl-ct a.small {
     font-size: 0.9em
 }
-.bl-sc.bl-tag-t  .bl-ct a.medium{
+
+.bl-sc.bl-tag-t .bl-ct a.medium {
     font-size: 1.1em;
 }
-.bl-sc.bl-tag-t  .bl-ct a.large{
+
+.bl-sc.bl-tag-t .bl-ct a.large {
     font-size: 1.4em;
 }
-.bl-sc.bl-tag-t  .bl-ct a.x-large{
+
+.bl-sc.bl-tag-t .bl-ct a.x-large {
     font-size: 1.8em;
+}
+
+
+
+/*manage*/
+
+.mn-list {}
+
+.mn-list .media-left {width: 100px;}
+.mn-list .media-left a{
+    display: block;
+}
+.mn-list .media-body {width: calc(100% - 100px);}
+.mn-list .media-left span{
+    font-size: 3.6em;
+    padding-top: 25px;
+    display: block;
+    text-align: center;
+    line-height: 1;
+}
+.mn-list-a h4{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.mn-list-a .media-body{}
+.mn-list-a .media-body p{
+    margin: 5px 0;
+}
+
+.mn-list-a .mn-tag{}
+.mn-list-a .mn-tag a{
+    margin-right: 5px;
+}
+.mn-list-a .mn-stat{}
+.mn-list-a .mn-stat span{
+    margin-right: 10px;
 }

@@ -663,6 +663,26 @@ class AdminController extends Controller
         }
     }
 
+    public function user_active($id='')
+    {
+        $u = User::find($id);
+        if ($u->count() > 0) {
+            if ($u->active == 0) {
+                $u->active = 1;
+            }else{
+                $u->active = 0;
+            }
+
+            if ($u->save()) {
+                return redirect()->back()->with(['status' => 1, 'message' => 'Thay đổi trạng thái thành viên thành công', 'label' => 'Thành công', 'alert' => 'success']);
+            }else{
+                return redirect()->back()->with(['status' => 0, 'message' => 'Thay đổi trạng thái thành viên thành công', 'label' => 'Lỗi', 'alert' => 'danger']);
+            }
+        }else{
+            return redirect()->back();
+        }
+    }
+
     public function user_auth($id='')
     {
         $u = User::find($id);

@@ -63,7 +63,7 @@
 							<td>{{$u->active}}</td>
 							<td>{{$u->auth}}</td>
 							<td>
-								<a href="{{ route('ad.u.lock', $u->id) }}" class="btn btn-success">Kích hoạt</a>
+								<a href="{{ route('ad.u.active', $u->id) }}" class="btn btn-success">Kích hoạt</a>
 								<a href="{{ route('ad.u.delete', $u->id) }}" class="btn btn-danger">Xóa</a>
 							</td>
 						</tr>

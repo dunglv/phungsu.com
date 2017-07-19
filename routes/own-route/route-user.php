@@ -45,6 +45,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
 
 	Route::get('/user/deactive', ['as' => 'ad.u.deactive', 'uses' => 'AdminController@user_deactive']);
 
+	Route::get('user/{id}/active', [
+		'as' => 'ad.u.active',
+		'uses' => 'AdminController@user_active'
+		]);
+
 	Route::get('user/{id}/lock', [
 		'as' => 'ad.u.lock',
 		'uses' => 'AdminController@user_lock'

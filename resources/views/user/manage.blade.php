@@ -18,21 +18,25 @@
                         @foreach($articles as $a)
                         <tr>
                             <td>
-                                <div class="media">
-                                    <div class="media-left" style="width:10%;">
+                                <div class="media mn-list mn-list-a">
+                                    <div class="media-left">
                                         <a href="#">
-                                           {!!Html::image($a->thumbnail)!!}
+                                           @if($a->format === 0)
+                                                {!!Html::image($a->thumbnail)!!}
+                                           @elseif($a->format=== 1)
+                                                <span><i class="fa fa-music"></i></span>
+                                           @endif
                                         </a>
                                     </div>
-                                    <div class="media-body" style="font-size: 1em;width:90%;">
+                                    <div class="media-body" style="font-size: 1em;">
                                         <h4 class="media-heading" style="font-size: 1em;font-weight: 700"><a href="{{ route('ui.article.detail-normal', $a->slug) }}">{{$a->title}}</a></h4>
-                                        <p>Trong <a href="{{ route('ui.category.detail', $a->category[0]->slug) }}">{{$a->category[0]->title}}</a></p>
-                                        <p>
+                                        <p>đã đăng <strong title="{{$a->created_at->format('Y-m-d H:i:s')}}">{{Helper::datetime_recent($a->created_at->format('Y-m-d H:i:s'))}} trước</strong> trong <a href="{{ route('ui.category.detail', $a->category[0]->slug) }}">{{$a->category[0]->title}}</a></p>
+                                        <p class="mn-tag">
                                             @foreach($a->tags as $tag)
-                                                <a href="{{ url('ui.tag.detail', $tag->slug) }}">{{$tag->title}}</a>
+                                                <a href="{{ route('ui.tag.detail', $tag->slug) }}">{{$tag->title}}</a>
                                             @endforeach
                                         </p>
-                                        <p><span><i class="fa fa-eye"></i> {{$a->stat->view}}</span><span><i class="fa fa-hand-o-up"></i> {{$a->stat->like}}</span><span><i class="fa fa-comment"></i> {{$a->comments->count()}}</span></p>
+                                        <p class="mn-stat"><span><i class="fa fa-eye"></i> {{$a->stat->view}}</span><span><i class="fa fa-hand-o-up"></i> {{$a->stat->like}}</span><span><i class="fa fa-comment"></i> {{$a->comments->count()}}</span></p>
                                     </div>
                                 </div>
                             </td>
@@ -59,7 +63,13 @@
                                 <div class="media">
                                     <div class="media-body" style="font-size: 1em;">
                                         <h4 class="media-heading" style="font-size: 1em;font-weight: 700"><a href="{{ route('ui.article.detail-normal', $c->id) }}">{{$c->comment}}</a></h4>
-                                        <p>Trong <a href="{{ route('ui.article.detail-normal', $c->article[0]->slug) }}">{{$c->article[0]->title}}</a></p>
+                                        {{-- Link format article --}}
+                                        @if($a->format === 0)
+                                            <p>đã bình luận <strong title="{{$c->created_at->format('Y-m-d H:i:s')}}">{{Helper::datetime_recent($c->created_at->format('Y-m-d H:i:s'))}} trước</strong> trong <a href="{{ route('ui.article.detail-normal', $c->article[0]->slug) }}#cmt_{{$c->id}}">{{$c->article[0]->title}}</a></p>
+                                       @elseif($a->format=== 1)
+                                            <p>đã bình luận <strong title="{{$c->created_at->format('Y-m-d H:i:s')}}">{{Helper::datetime_recent($c->created_at->format('Y-m-d H:i:s'))}} trước</strong> trong <a href="{{ route('ui.article.detail-audio', $c->article[0]->slug) }}#cmt_{{$c->id}}">{{$c->article[0]->title}}</a></p>
+                                       @endif
+                                        
                                     </div>
                                 </div>
                             </td>
